@@ -1,0 +1,32 @@
+name: Docker build
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches-ignore:
+      - main
+
+env:
+  REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-build"
+  DOCKER_IMAGE_TYPES: "base srcds css"
+
+jobs:
+  build:
+    permissions:
+      contents: read
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build images
+        run: |
+          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
+            docker-compose build ${docker_image_type}
+          done
+
+          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
+            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}
+          done

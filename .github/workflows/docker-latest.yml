@@ -1,0 +1,40 @@
+name: Docker build and publish latest
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
+  DOCKER_IMAGE_TYPES: "base srcds css"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push latest images
+        run: |
+          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
+            docker-compose build ${docker_image_type}
+
+            src_docker_image=${REGISTRY_IMAGE}:${docker_image_type}
+            dst_docker_image=${REGISTRY_IMAGE}:${docker_image_type}-latest
+
+            docker tag ${src_docker_image} ${dst_docker_image}
+            docker push ${dst_docker_image}
+          done
+
+          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
+            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}
+            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-latest
+          done

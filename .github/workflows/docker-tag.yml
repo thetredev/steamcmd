@@ -1,0 +1,39 @@
+name: Docker tag release
+
+on:
+  push:
+    tags:
+      - '**'
+
+env:
+  REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
+  DOCKER_IMAGE_TYPES: "base srcds css"
+
+jobs:
+  retag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Publish tagged images
+        run: |
+          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
+            src_docker_image=${REGISTRY_IMAGE}:${docker_image_type}-latest
+            dst_docker_image=${REGISTRY_IMAGE}:${docker_image_type}-${{ github.ref_name }}
+
+            docker pull ${src_docker_image}
+            docker tag ${src_docker_image} ${dst_docker_image}
+            docker push ${dst_docker_image}
+          done
+
+          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
+            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-latest
+            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-${{ github.ref_name }}
+          done

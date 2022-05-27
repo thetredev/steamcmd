@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  base:
+    image: ${REGISTRY_IMAGE}:base
+    build:
+      context: image/base
+      cache_from:
+        - ${REGISTRY_IMAGE}:base
+
+  srcds:
+    image: ${REGISTRY_IMAGE}:srcds
+    build:
+      context: image/srcds
+      cache_from:
+        - ${REGISTRY_IMAGE}:srcds
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:base
+
+  css:
+    image: ${REGISTRY_IMAGE}:css
+    build:
+      context: image/css
+      cache_from:
+        - ${REGISTRY_IMAGE}:css
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds

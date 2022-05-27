@@ -1,0 +1,23 @@
+#!/bin/bash
+
+update() {
+    apt-get update
+}
+
+install() {
+    apt-get -y install --no-install-recommends ${@}
+}
+
+clean() {
+    apt-get -y autoclean
+    apt-get -y clean
+    rm -rf /var/lib/apt/lists/*
+}
+
+quick-install() {
+    update
+    install ${@}
+    clean
+}
+
+${@}

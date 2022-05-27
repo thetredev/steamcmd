@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  css:
+    image: ghcr.io/thetredev/steamcmd:css-latest
+    container_name: css
+    stdin_open: true
+    tty: true
+    environment:
+      TIME_ZONE: Europe/Berlin
+      STEAMCMD_UID: 1000
+      STEAMCMD_GID: 5000
+    ports:
+      - "26901:26901/udp"
+      - "1200:1200/tcp"
+      - "27005:27005/udp"
+      - "27015:27015/udp"
+      - "27015:27015/tcp"
+      - "27020:27020"
+    volumes:
+      - ./css:/var/lib/steamcmd/server
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048
