@@ -25,3 +25,12 @@ services:
         - ${REGISTRY_IMAGE}:css
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
+  csgo:
+    image: ${REGISTRY_IMAGE}:csgo
+    build:
+      context: image/csgo
+      cache_from:
+        - ${REGISTRY_IMAGE}:csgo
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds

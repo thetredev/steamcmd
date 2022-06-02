@@ -30,6 +30,7 @@ Currently supported game server images:
 | Game | Docker Image |
 | ---- | ---- |
 | Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:css-latest` |
+| Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 
 See the `compose` directory for more details.
 

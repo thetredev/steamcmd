@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
-  DOCKER_IMAGE_TYPES: "base srcds css"
+  DOCKER_IMAGE_TYPES: "base srcds css csgo"
 
 jobs:
   build:
