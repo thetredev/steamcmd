@@ -15,5 +15,14 @@ chown -R steamcmd:steamcmd /tmp/dumps
 # Change ownership of steamcmd server folder to new steamcmd GID and UID
 chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_HOME}
 
-# Execute server.sh
-exec /opt/server.sh $@
+# Create tmux session
+runuser -u steamcmd -- tmux new-session -d -s ${STEAMCMD_SERVER_SESSION_NAME}
+
+# Install the game server if not already installed...
+if [ ! -d ${STEAMCMD_SERVER_HOME}/${STEAMCMD_SERVER_GAME} ]; then
+    server.sh update
+fi
+
+# Run the server
+server.sh run
+exec server.sh wait

@@ -4,13 +4,21 @@ if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
     exec runuser -u steamcmd -- ${0} $@
 fi
 
-if ! tmux ls > /dev/null 2>&1 | grep ${STEAMCMD_SERVER_SESSION_NAME} > /dev/null; then
-    tmux new-session -d -s ${STEAMCMD_SERVER_SESSION_NAME}
-fi
+
 
 healthy() {
     return $(tmux capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "Connection to Steam servers successful." > /dev/null)
 }
+
+
+wait() {
+    until ! _is_running srcds; do
+        :
+    done
+
+    return 0
+}
+
 
 update() {
     tmux send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "steamcmd \

@@ -37,6 +37,3 @@ HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \
 
 # Set /docker/entrypoint.sh script as default entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-# Attach to tmux session by default
-CMD ["attach"]
