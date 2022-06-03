@@ -5,6 +5,8 @@ if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
 fi
 
 
+SIGNAL_SRCDS_HEALTHY="Connection to Steam servers successful."
+
 MESSAGE_PREFIX="[SRCDS]"
 MESSAGE_STEAMCMD_USE_ATTACH="Use 'server.sh attach' to attach to the SRCDS tmux session."
 
@@ -24,7 +26,7 @@ _is_running() {
 
 
 healthy() {
-    return $(tmux capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "Connection to Steam servers successful." > /dev/null)
+    return $(tmux capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_SRCDS_HEALTHY}" > /dev/null)
 }
 
 
