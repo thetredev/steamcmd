@@ -4,6 +4,7 @@ services:
   csgo:
     image: ghcr.io/thetredev/steamcmd:csgo-latest
     container_name: csgo
+    restart: unless-stopped
     stdin_open: true
     tty: true
     environment:

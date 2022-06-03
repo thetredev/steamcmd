@@ -4,6 +4,7 @@ services:
   css:
     image: ghcr.io/thetredev/steamcmd:css-latest
     container_name: css
+    restart: unless-stopped
     stdin_open: true
     tty: true
     environment:
@@ -24,6 +25,7 @@ services:
   csgo:
     image: ghcr.io/thetredev/steamcmd:csgo-latest
     container_name: csgo
+    restart: unless-stopped
     stdin_open: true
     tty: true
     environment:
