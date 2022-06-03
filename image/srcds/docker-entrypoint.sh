@@ -18,10 +18,8 @@ chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_HOME}
 # Create tmux session
 runuser -u steamcmd -- tmux new-session -d -s ${STEAMCMD_SERVER_SESSION_NAME}
 
-# Install the game server if not already installed...
-if [ ! -d ${STEAMCMD_SERVER_HOME}/${STEAMCMD_SERVER_GAME} ]; then
-    server.sh update
-fi
+# Update the server
+server.sh update
 
 # Run the server
 server.sh run
