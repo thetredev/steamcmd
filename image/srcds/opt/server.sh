@@ -5,6 +5,19 @@ if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
 fi
 
 
+MESSAGE_PREFIX="[SRCDS]"
+MESSAGE_STEAMCMD_USE_ATTACH="Use 'server.sh attach' to attach to the SRCDS tmux session."
+
+MESSAGE_STEAMCMD_UPDATE_STARTED="${MESSAGE_PREFIX} Updating game server... ${MESSAGE_STEAMCMD_USE_ATTACH}"
+MESSAGE_STEAMCMD_UPDATE_RUNNING="${MESSAGE_PREFIX} SteamCMD is currently updating. ${MESSAGE_STEAMCMD_USE_ATTACH}"
+MESSAGE_STEAMCMD_UPDATE_FINISHED="${MESSAGE_PREFIX} Update finished."
+
+MESSAGE_STEAMCMD_SERVER_STARTED="${MESSAGE_PREFIX} Server started in tmux session. ${MESSAGE_STEAMCMD_USE_ATTACH}"
+MESSAGE_STEAMCMD_SERVER_WAITING="${MESSAGE_PREFIX} Waiting for server to become healthy..."
+MESSAGE_STEAMCMD_SERVER_RUNNING="${MESSAGE_PREFIX} Server is currently running. ${MESSAGE_STEAMCMD_USE_ATTACH}"
+MESSAGE_STEAMCMD_SERVER_HEALTHY="${MESSAGE_PREFIX} Server is healthy! ${MESSAGE_STEAMCMD_USE_ATTACH}"
+
+
 _is_running() {
     return $(ps cax | grep ${1} > /dev/null)
 }
@@ -28,10 +41,11 @@ attach() {
 
 update() {
     if _is_running steamcmd; then
+        echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
         return 1
     fi
 
-    echo "Updating game server... Use 'server.sh attach' to attach to the SRCDS tmux session."
+    echo ${MESSAGE_STEAMCMD_UPDATE_STARTED}
 
     tmux send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "steamcmd \
         +force_install_dir ${STEAMCMD_SERVER_HOME} \
@@ -40,7 +54,7 @@ update() {
         +quit; tmux wait-for -S steamcmd-update-finished" "Enter"
 
     tmux wait-for steamcmd-update-finished
-    echo "Finished."
+    echo ${MESSAGE_STEAMCMD_UPDATE_FINISHED}
 
     return 0
 }
@@ -48,12 +62,12 @@ update() {
 
 run() {
     if _is_running steamcmd; then
-        echo "SteamCMD is currently updating. Use 'server.sh attach' to attach to the SRCDS tmux session."
+        echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
         return 1
     fi
 
     if _is_running srcds; then
-        echo "SRCDS is currently running. Use 'server.sh attach' to attach to the SRCDS tmux session."
+        echo ${MESSAGE_STEAMCMD_SERVER_RUNNING}
         return 2
     fi
 
@@ -73,7 +87,7 @@ run() {
         echo "fps_max ${STEAMCMD_SERVER_FPSMAX}" >> ${steamcmd_cfg_dir}/tickrate_enabler.cfg
     fi
 
-    echo "Starting SRCDS in tmux session..."
+    echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
 
     tmux send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "cd ${STEAMCMD_SERVER_HOME}; bash ./srcds_run \
         -console \
@@ -86,9 +100,12 @@ run() {
         -threads ${STEAMCMD_SERVER_THREADS} \
         -nodev" "Enter"
 
-    until healthy; do : done
+    until healthy; do
+        echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
+        sleep 5
+    done
 
-    echo "Successfully started SRCDS in tmux session. Use 'server.sh attach' to attach to it."
+    echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
     return 0
 }
 
