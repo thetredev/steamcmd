@@ -32,7 +32,7 @@ Currently supported game server images:
 | Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:css-latest` |
 | Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 
-See the `compose` directory for more details. If you want to run multiple game servers using one single compose file, see the `compose/docker-compose.multiple.yml`.
+See the `compose` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/docker-compose.multiple.yml`.
 
 ## Image repository
 The image repository is: `ghcr.io/thetredev/steamcmd`
