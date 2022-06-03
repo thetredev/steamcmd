@@ -11,12 +11,9 @@ services:
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
     ports:
-      - "26901:26901/udp"
-      - "1200:1200/tcp"
-      - "27005:27005/udp"
       - "27015:27015/udp"
-      - "27015:27015/tcp"
-      - "27020:27020"
+      # enable the TCP one for RCON
+      #- "27015:27015/tcp"
     volumes:
       - ./csgo:/var/lib/steamcmd/server
     ulimits:
