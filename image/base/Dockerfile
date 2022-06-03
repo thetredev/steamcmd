@@ -59,15 +59,15 @@ ENV STEAMCMD_GID=5000
 
 # Create SteamCMD user
 RUN groupadd -r -g ${STEAMCMD_GID} steamcmd && \
-    useradd -ms /bin/bash -r -u ${STEAMCMD_UID} -g ${STEAMCMD_GID} steamcmd && \
-    su - steamcmd -c 'mkdir -p $HOME/.steam'
+    useradd -ms /bin/bash -r -u ${STEAMCMD_UID} -g ${STEAMCMD_GID} steamcmd
 
 # Switch to SteamCMD user
 USER steamcmd
 WORKDIR ${STEAMCMD_SERVER_HOME}
 
 # Update SteamCMD once
-RUN steamcmd +quit > /dev/null 2>&1
+RUN mkdir -p $HOME/.steam && \
+    steamcmd +quit > /dev/null 2>&1
 
 # Fix SteamCMD runtime error
 # [S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.
