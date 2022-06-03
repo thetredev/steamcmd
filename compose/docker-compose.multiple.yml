@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  css:
+    image: ghcr.io/thetredev/steamcmd:css-latest
+    container_name: css
+    stdin_open: true
+    tty: true
+    environment:
+      TIME_ZONE: Europe/Berlin
+      STEAMCMD_UID: 1000
+      STEAMCMD_GID: 5000
+    ports:
+      - "27015:27015/udp"
+      # enable the TCP one for RCON
+      #- "27015:27015/tcp"
+    volumes:
+      - ./css:/var/lib/steamcmd/server
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048
+
+  csgo:
+    image: ghcr.io/thetredev/steamcmd:csgo-latest
+    container_name: csgo
+    stdin_open: true
+    tty: true
+    environment:
+      TIME_ZONE: Europe/Berlin
+      STEAMCMD_UID: 1000
+      STEAMCMD_GID: 5000
+
+      # To run multiple game servers as compose services,
+      # the container port must be set to the one you want exposed.
+      # So, if 'css' is exposed at port 27015, then 'csgo' must be exposed
+      # on any other port than 27015, preferably in the 27000-27999 range.
+
+      # We'll use 27016 for this one:
+      STEAMCMD_SERVER_PORT: 27016
+    ports:
+      - "27016:27016/udp"
+      # enable the TCP one for RCON
+      #- "27016:27016/tcp"
+    volumes:
+      - ./csgo:/var/lib/steamcmd/server
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048
