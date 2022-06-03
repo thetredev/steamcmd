@@ -62,6 +62,18 @@ update() {
 }
 
 
+_prepare_tickrate_enabler() {
+    cat > ${1} << EOF_TICKRATE_ENABLER_CFG
+sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}
+sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}
+sv_minrate ${STEAMCMD_SERVER_MINRATE}
+sv_maxrate ${STEAMCMD_SERVER_MAXRATE}
+fps_max ${STEAMCMD_SERVER_FPSMAX}
+
+EOF_TICKRATE_ENABLER_CFG
+}
+
+
 run() {
     if _is_running steamcmd; then
         echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
@@ -82,11 +94,7 @@ run() {
 
     # Prepare tickrate_enabler.cfg file in the server cfg folder if it doesn't exist yet
     if [ ! -f ${steamcmd_cfg_dir}/tickrate_enabler.cfg ]; then
-        echo "sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}" > ${steamcmd_cfg_dir}/tickrate_enabler.cfg
-        echo "sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}" >> ${steamcmd_cfg_dir}/tickrate_enabler.cfg
-        echo "sv_minrate ${STEAMCMD_SERVER_MINRATE}" >> ${steamcmd_cfg_dir}/tickrate_enabler.cfg
-        echo "sv_maxrate ${STEAMCMD_SERVER_MAXRATE}" >> ${steamcmd_cfg_dir}/tickrate_enabler.cfg
-        echo "fps_max ${STEAMCMD_SERVER_FPSMAX}" >> ${steamcmd_cfg_dir}/tickrate_enabler.cfg
+        _prepare_tickrate_enabler "${steamcmd_cfg_dir}/tickrate_enabler.cfg"
     fi
 
     echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
