@@ -35,7 +35,8 @@ Currently supported game server images:
 See the `compose` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/docker-compose.multiple.yml`.
 
 ## Image repository
-The image repository is: `ghcr.io/thetredev/steamcmd`
+The image repository is: `ghcr.io/thetredev/steamcmd`<br/>
+See https://github.com/thetredev/steamcmd/pkgs/container/steamcmd/versions for details.
 
 The GitHub Actions workflows are setup in the following way:
 - Pushes to the `main` branch lead to the image tags `ghcr.io/thetredev/steamcmd:<image>-latest`, where `<image>` is one of the following: `base`, `srcds`, and any game servers a `Dockerfile` is provided for (see *the supported game server images* above)
