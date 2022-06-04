@@ -103,7 +103,7 @@ run() {
         -game ${STEAMCMD_SERVER_GAME} \
         +ip 0.0.0.0 \
         -port ${STEAMCMD_SERVER_PORT} \
-        +maxplayers ${STEAMCMD_SERVER_MAXPLAYERS} \
+        ${STEAMCMD_SERVER_MAXPLAYERS} \
         +map ${STEAMCMD_SERVER_MAP} \
         -tickrate ${STEAMCMD_SERVER_TICKRATE} \
         -threads ${STEAMCMD_SERVER_THREADS} \
