@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export REGISTRY_IMAGE="thetredev-steamcmd"
+source ./local-vars.sh
 docker-compose build ${@}
