@@ -78,5 +78,5 @@ RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32 ${HOME}/.steam/sdk32
 VOLUME [ ${STEAMCMD_INSTALL_DIR} ]
 
 # Set SteamCMD executable as default entrypoint
-ENTRYPOINT ["steamcmd"]
-CMD ["+help", "+quit"]
+ENTRYPOINT [ "steamcmd" ]
+CMD [ "+help", "+quit" ]

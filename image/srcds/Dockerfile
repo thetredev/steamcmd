@@ -34,4 +34,4 @@ HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \
     CMD server.sh healthy
 
 # Set /docker/entrypoint.sh script as default entrypoint
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
