@@ -34,11 +34,6 @@ jobs:
             docker push ${dst_docker_image}
           done
 
-          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
-            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}
-            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-latest
-          done
-
       - name: Run Trivy vulnerability scanner - SRCDS image
         uses: aquasecurity/trivy-action@4b9b6fb4ef28b31450391a93ade098bb00de584e
         with:

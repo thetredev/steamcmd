@@ -32,8 +32,3 @@ jobs:
             docker tag ${src_docker_image} ${dst_docker_image}
             docker push ${dst_docker_image}
           done
-
-          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
-            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-latest
-            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-${{ github.ref_name }}
-          done

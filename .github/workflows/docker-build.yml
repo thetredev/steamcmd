@@ -24,7 +24,3 @@ jobs:
           for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
             docker-compose build ${docker_image_type}
           done
-
-          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
-            docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}
-          done
