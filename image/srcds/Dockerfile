@@ -5,9 +5,10 @@ FROM ${REGISTRY_BASE_IMAGE}
 USER root
 
 # Install required packages for SRCDS execution
-RUN yum-docker quick-install \
+RUN yum-docker quick-install --enablerepo=powertools \
         ncurses-compat-libs.i686 \
-        SDL.i686
+        SDL2 \
+        SDL2.i686
 
 # Set default environment variables
 ENV STEAMCMD_SERVER_APPID=0
