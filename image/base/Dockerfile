@@ -54,26 +54,28 @@ USER steamcmd
 WORKDIR ${STEAMCMD_SERVER_HOME}
 
 # Install SteamCMD
-RUN mkdir -p $HOME/.local/share/Steam/steamcmd && \
-    cd $HOME/.local/share/Steam/steamcmd && \
+ENV STEAMCMD_INSTALL_DIR="/home/steamcmd/package"
+
+RUN mkdir -p ${STEAMCMD_INSTALL_DIR} && \
+    cd ${STEAMCMD_INSTALL_DIR} && \
     curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz && \
     tar -xvzf steamcmd_linux.tar.gz && \
     rm -rf steamcmd_linux.tar.gz && \
     ln -sf $(pwd)/steamcmd.sh $(pwd)/steamcmd
 
 # Append SteamCMD install directory to PATH
-ENV PATH=${PATH}:/home/steamcmd/.local/share/Steam/steamcmd
+ENV PATH=${PATH}:${STEAMCMD_INSTALL_DIR}
 
 # Update SteamCMD once
-RUN mkdir -p $HOME/.steam && \
+RUN mkdir -p ${HOME}/.steam && \
     steamcmd +quit > /dev/null 2>&1
 
 # Fix SteamCMD runtime error
 # [S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.
-RUN ln -sf $HOME/.local/share/Steam/steamcmd/linux32 $HOME/.steam/sdk32
+RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32 ${HOME}/.steam/sdk32
 
 # Declare SteamCMD install directory as Docker volume to enable incremental updates
-VOLUME [ "/home/steamcmd/.local/share/Steam/steamcmd" ]
+VOLUME [ ${STEAMCMD_INSTALL_DIR} ]
 
 # Set SteamCMD executable as default entrypoint
 ENTRYPOINT ["steamcmd"]
