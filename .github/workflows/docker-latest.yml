@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-
+      security-events: write
     steps:
       - uses: actions/checkout@v3
 
@@ -38,3 +38,16 @@ jobs:
             docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}
             docker image rm -f ${REGISTRY_IMAGE}:${docker_image_type}-latest
           done
+
+      - name: Run Trivy vulnerability scanner - SRCDS image
+        uses: aquasecurity/trivy-action@4b9b6fb4ef28b31450391a93ade098bb00de584e
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:srcds-latest"
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
