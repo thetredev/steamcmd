@@ -108,8 +108,8 @@ run() {
         -nodev" "Enter"
 
     until healthy; do
-        echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
         sleep 5
+        echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
     done
 
     echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
