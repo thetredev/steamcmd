@@ -47,7 +47,7 @@ ENV STEAMCMD_GID=5000
 
 # Create SteamCMD user
 RUN groupadd -r -g ${STEAMCMD_GID} steamcmd && \
-    useradd -ms /bin/bash -r -u ${STEAMCMD_UID} -g ${STEAMCMD_GID} steamcmd
+    useradd -ms /bin/bash -r -l -u ${STEAMCMD_UID} -g ${STEAMCMD_GID} steamcmd
 
 # Switch to SteamCMD user
 USER steamcmd
