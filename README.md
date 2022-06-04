@@ -21,7 +21,7 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 - Provides the script `/opt/server.sh` to manage game servers using a single `tmux` session
 - Provides `server.sh` shortcuts: `attach`, `run`, `update`
 - Provides a `docker-entrypoint.sh` which itself is executed as `root` with always-correct timezone and ownership of server files
-- Tries to enable `128 tick` configurations by default (currently WIP)
+- Tries to enable `128 tick` configurations by default (CS:GO). CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
 
 The `/opt/server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec runuser` to prevent ownership mismatch.
 
