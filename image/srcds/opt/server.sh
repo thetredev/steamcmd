@@ -91,10 +91,8 @@ run() {
         cp /etc/steamcmd/srcds/cfg/server.cfg ${steamcmd_cfg_dir}/server.cfg
     fi
 
-    # Prepare tickrate_enabler.cfg file in the server cfg folder if it doesn't exist yet
-    if [ ! -f ${steamcmd_cfg_dir}/tickrate_enabler.cfg ]; then
-        _prepare_tickrate_enabler "${steamcmd_cfg_dir}/tickrate_enabler.cfg"
-    fi
+    # Prepare tickrate_enabler.cfg file in the server cfg folder
+    _prepare_tickrate_enabler "${steamcmd_cfg_dir}/tickrate_enabler.cfg"
 
     echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
 
