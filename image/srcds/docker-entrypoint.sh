@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Configure time zone for runtime
+echo "Setting time zone to: ${TIME_ZONE}"
 ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
-dpkg-reconfigure tzdata
 
 # Set steamcmd user GID and UID
 groupmod -g ${STEAMCMD_GID} steamcmd

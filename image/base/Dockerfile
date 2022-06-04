@@ -1,57 +1,45 @@
-FROM ubuntu:jammy-20220428
+FROM rockylinux:8.5.20220308
 
 # Prepare image environment
-ENV DEBIAN_FRONTEND="noninteractive"
 ENV TIME_ZONE="UTC"
-
-# Copy build context into image
-COPY . /
-
-# Fix Canonical's mess...
-RUN rm -rf /etc/apt/apt.conf.d/docker-clean
-
-# Get rid of debconf errors
-RUN apt-docker quick-install apt-utils
-
-# Set timezone for image preparation
-RUN ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime && \
-    apt-docker quick-install tzdata
-
-# Prepare locales: get rid of perl locale errors
-RUN apt-docker quick-install locales
-
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US
 ENV LC_ALL=C
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    dpkg-reconfigure locales
+# yum: Clean dependencies on remove
+RUN echo "clean_requirements_on_remove=1" >> /etc/yum.conf
 
-# Install basic tools
-RUN apt-docker quick-install \
-        ca-certificates \
-        wget \
-        curl \
+# Copy build context into image
+COPY . /
+
+# Update packages
+RUN yum-docker update
+
+# Install packages
+RUN yum-docker quick-install \
+        # basic system packages
+        tzdata \
+        glibc-langpack-en \
+        # basic tools
         file \
         zip \
         unzip \
-        tmux
+        tmux \
+        # required packages for SteamCMD
+        glibc.i686 \
+        libgcc.i686 \
+        libstdc++.i686
 
-# Update CA certificates
-RUN update-ca-certificates
+# Remove vulnerable packages
+RUN yum-docker remove \
+        platform-python-pip
+
+# Update CA trust
+RUN update-ca-trust
 
 # Prepare SteamCMD server directory
 ENV STEAMCMD_SERVER_HOME="/var/lib/steamcmd/server"
 RUN mkdir -p ${STEAMCMD_SERVER_HOME}
-
-# Install SteamCMD
-RUN echo steam steam/question select "I AGREE" | debconf-set-selections && \
-    echo steam steam/license note '' | debconf-set-selections && \
-    dpkg --add-architecture i386 && \
-    apt-docker quick-install \
-        steamcmd \
-    && \
-        update-alternatives --install /usr/bin/steamcmd steamcmd /usr/games/steamcmd 1
 
 # Set default GID and UID for SteamCMD user
 ENV STEAMCMD_UID=5000
@@ -64,6 +52,17 @@ RUN groupadd -r -g ${STEAMCMD_GID} steamcmd && \
 # Switch to SteamCMD user
 USER steamcmd
 WORKDIR ${STEAMCMD_SERVER_HOME}
+
+# Install SteamCMD
+RUN mkdir -p $HOME/.local/share/Steam/steamcmd && \
+    cd $HOME/.local/share/Steam/steamcmd && \
+    curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz && \
+    tar -xvzf steamcmd_linux.tar.gz && \
+    rm -rf steamcmd_linux.tar.gz && \
+    ln -sf $(pwd)/steamcmd.sh $(pwd)/steamcmd
+
+# Append SteamCMD install directory to PATH
+ENV PATH=${PATH}:/home/steamcmd/.local/share/Steam/steamcmd
 
 # Update SteamCMD once
 RUN mkdir -p $HOME/.steam && \

@@ -5,10 +5,9 @@ FROM ${REGISTRY_BASE_IMAGE}
 USER root
 
 # Install required packages for SRCDS execution
-RUN apt-docker quick-install \
-        libtinfo5:i386 \
-        libncurses5-dev:i386 \
-        libsdl2-2.0-0:i386
+RUN yum-docker quick-install \
+        ncurses-compat-libs.i686 \
+        SDL.i686
 
 # Set default environment variables
 ENV STEAMCMD_SERVER_APPID=0
@@ -29,7 +28,7 @@ ENV STEAMCMD_SERVER_SESSION_NAME=srcds
 COPY . /
 
 # Symlink /opt/server.sh to /usr/bin/server.sh
-RUN update-alternatives --install /usr/bin/server.sh server.sh /opt/server.sh 1
+RUN ln -sf /opt/server.sh /usr/bin/server.sh
 
 # Declare SRCDS health check
 HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \

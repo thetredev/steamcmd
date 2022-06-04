@@ -1,0 +1,25 @@
+#!/bin/bash
+
+install() {
+    yum -y install ${@}
+}
+
+remove() {
+    yum -y remove ${@}
+}
+
+clean() {
+    yum -y clean all
+}
+
+update() {
+    yum -y update
+    clean
+}
+
+quick-install() {
+    install ${@}
+    clean
+}
+
+${@}
