@@ -1,5 +1,11 @@
 version: '3.7'
 
+networks:
+  srcds:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: 0
+
 services:
   css:
     image: ghcr.io/thetredev/steamcmd:css-latest
@@ -17,6 +23,12 @@ services:
       #- "27015:27015/tcp"
     volumes:
       - ./css:/var/lib/steamcmd/server
+    networks:
+      - srcds
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
     ulimits:
       nofile:
         soft: 2048
@@ -46,6 +58,12 @@ services:
       #- "27016:27016/tcp"
     volumes:
       - ./csgo:/var/lib/steamcmd/server
+    networks:
+      - srcds
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
     ulimits:
       nofile:
         soft: 2048
