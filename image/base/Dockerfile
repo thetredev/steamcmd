@@ -1,4 +1,4 @@
-FROM rockylinux:8.5.20220308
+FROM almalinux:8.6-minimal-20220512
 
 # Prepare image environment
 ENV TIME_ZONE="UTC"
@@ -6,33 +6,27 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US
 ENV LC_ALL=C
 
-# yum: Clean dependencies on remove
-RUN echo "clean_requirements_on_remove=1" >> /etc/yum.conf
-
 # Copy build context into image
 COPY . /
-
-# Update packages
-RUN yum-docker update
 
 # Install packages
 RUN yum-docker quick-install \
         # basic system packages
-        tzdata \
         glibc-langpack-en \
+        util-linux \
         # basic tools
         file \
         zip \
         unzip \
         tmux \
+        procps \
+        tar \
+        passwd \
+        shadow-utils \
         # required packages for SteamCMD
         glibc.i686 \
         libgcc.i686 \
         libstdc++.i686
-
-# Remove vulnerable packages
-RUN yum-docker remove \
-        platform-python-pip
 
 # Update CA trust
 RUN update-ca-trust

@@ -1,19 +1,19 @@
 #!/bin/bash
 
 install() {
-    yum -y install ${@}
+    microdnf -y install ${@}
 }
 
 remove() {
-    yum -y remove ${@}
+    microdnf -y remove ${@}
 }
 
 clean() {
-    yum -y clean all
+    microdnf -y clean all
 }
 
 update() {
-    yum -y update
+    microdnf -y update
     clean
 }
 
