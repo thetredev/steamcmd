@@ -39,7 +39,6 @@ See the `compose/hlds` directory for more details.
 - Provides a generic base for SRCDS-based game servers
 - `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
 - Provides the script `/opt/server.sh` to manage game servers using a single `tmux` session
-- Provides `server.sh` shortcuts: `attach`, `run`, `update`
 - Provides a `docker-entrypoint.sh` which itself is executed as `root` with always-correct timezone and ownership of server files
 - Tries to enable `128 tick` configurations by default (CS:GO). CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
 
