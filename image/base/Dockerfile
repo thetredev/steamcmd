@@ -1,8 +1,43 @@
+# gosu builder: temporary, until an updated version of gosu is available.
+FROM golang:1.17-alpine3.15 AS gosu-builder
+
+# This is going to be an unsigned version of gosu, obviously.
+# However, we need a newer version than 1.14 to get rid of runc CVEs
+# present in runc 1.0.1 which is used in golang 1.16 used to build gosu 1.14.
+ARG GOSU_GITHUB_URL=https://raw.githubusercontent.com/tianon/gosu
+
+# This commit SHA represents the latest master of the project as of
+# 2022-06-06.
+ARG GOSU_COMMIT_SHA=b6fb26168851702bd888af4e254f7e59d6e14a86
+
+# Set build arguments
+ENV CGO_ENABLED 0
+ENV BUILD_FLAGS="-v -ldflags '-d -s -w'"
+
+# Set workdir
+WORKDIR /go/src/github.com/tianon/gosu
+
+# Build and test gosu
+RUN apk add --no-cache file && \
+    wget ${GOSU_GITHUB_URL}/${GOSU_COMMIT_SHA}/go.mod && \
+    wget ${GOSU_GITHUB_URL}/${GOSU_COMMIT_SHA}/go.sum && \
+    go mod download && \
+    go mod verify && \
+    wget ${GOSU_GITHUB_URL}/${GOSU_COMMIT_SHA}/main.go && \
+    wget ${GOSU_GITHUB_URL}/${GOSU_COMMIT_SHA}/setup-user.go && \
+    wget ${GOSU_GITHUB_URL}/${GOSU_COMMIT_SHA}/version.go && \
+    eval "GOARCH=amd64 go build $BUILD_FLAGS -o /go/bin/gosu-amd64" && \
+    file /go/bin/gosu-amd64 && \
+    /go/bin/gosu-amd64 --version && \
+    /go/bin/gosu-amd64 nobody id && \
+    /go/bin/gosu-amd64 nobody ls -l /proc/self/fd
+
+
+# Release image
 FROM almalinux:8.6-minimal-20220512
 
 # Build arguments
 ARG TINI_VERSION=v0.19.0
-ARG GOSU_VERISON=1.14
 
 # Prepare image environment
 ENV TIME_ZONE="UTC"
@@ -43,8 +78,8 @@ RUN curl -fsSL -o /usr/local/bin/tini https://github.com/krallin/tini/releases/d
     chmod +x /usr/local/bin/tini
 
 # Install and configure gosu
-RUN curl -fsSL -o /usr/local/bin/gosu https://github.com/tianon/gosu/releases/download/${GOSU_VERISON}/gosu-amd64 && \
-    chmod +x /usr/local/bin/gosu && \
+COPY --from=gosu-builder /go/bin/gosu-amd64 /usr/local/bin/gosu
+RUN chmod +x /usr/local/bin/gosu && \
     gosu nobody true
 
 # Prepare SteamCMD server directory
