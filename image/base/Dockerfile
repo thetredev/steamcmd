@@ -1,5 +1,9 @@
 FROM almalinux:8.6-minimal-20220512
 
+# Build arguments
+ARG TINI_VERSION=v0.19.0
+ARG GOSU_VERISON=1.14
+
 # Prepare image environment
 ENV TIME_ZONE="UTC"
 ENV LANG=en_US.UTF-8
@@ -13,7 +17,7 @@ COPY . /
 RUN yum-docker quick-install \
         # basic system packages
         glibc-langpack-en \
-        util-linux \
+        util-linux-user \
         # basic tools
         file \
         zip \
@@ -30,6 +34,18 @@ RUN yum-docker quick-install \
 
 # Update CA trust
 RUN update-ca-trust
+
+# Disable root login
+RUN chsh -s /usr/sbin/nologin root
+
+# Install and configure tini
+RUN curl -fsSL -o /usr/local/bin/tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-amd64 && \
+    chmod +x /usr/local/bin/tini
+
+# Install and configure gosu
+RUN curl -fsSL -o /usr/local/bin/gosu https://github.com/tianon/gosu/releases/download/${GOSU_VERISON}/gosu-amd64 && \
+    chmod +x /usr/local/bin/gosu && \
+    gosu nobody true
 
 # Prepare SteamCMD server directory
 ENV STEAMCMD_SERVER_HOME="/var/lib/steamcmd/server"

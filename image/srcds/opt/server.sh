@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
-    exec runuser -u steamcmd -- ${0} $@
+    exec gosu steamcmd ${0} $@
 fi
 
 

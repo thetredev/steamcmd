@@ -1,26 +1,29 @@
 #!/bin/bash
 
-# Configure time zone for runtime
-echo "Setting time zone to: ${TIME_ZONE}"
-ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
+# Set original entrypoint
+set -- tini -- start.sh ${@}
 
-# Set steamcmd user GID and UID
-groupmod -g ${STEAMCMD_GID} steamcmd
-usermod -u ${STEAMCMD_UID} steamcmd
+# Fix file and directory permissions if run as root
+if [ $(id -u) -eq 0 ]; then
 
-# Change ownership of steamcmd dumps folder to new steamcmd GID and UID
-mkdir -p /tmp/dumps
-chown -R steamcmd:steamcmd /tmp/dumps
+    # Configure time zone for runtime
+    echo "Setting time zone to: ${TIME_ZONE}"
+    ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
 
-# Change ownership of steamcmd server folder to new steamcmd GID and UID
-chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_HOME}
+    # Set steamcmd user GID and UID
+    groupmod -g ${STEAMCMD_GID} steamcmd
+    usermod -u ${STEAMCMD_UID} steamcmd
 
-# Create tmux session
-runuser -u steamcmd -- tmux new-session -d -s ${STEAMCMD_SERVER_SESSION_NAME}
+    # Change ownership of steamcmd dumps folder to new steamcmd GID and UID
+    mkdir -p /tmp/dumps
+    chown -R steamcmd:steamcmd /tmp/dumps
 
-# Update the server
-server.sh update
+    # Change ownership of steamcmd server folder to new steamcmd GID and UID
+    chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_HOME}
 
-# Run the server
-server.sh run
-exec server.sh wait
+    # Call to gosu to drop from root user to steamcmd user
+    # when running original entrypoint
+    set -- gosu steamcmd $@
+fi
+
+exec ${@}
