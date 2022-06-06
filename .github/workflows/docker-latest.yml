@@ -6,6 +6,7 @@ on:
       - main
 
 env:
+  DOCKER_BUILDKIT: 1
   REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
   DOCKER_IMAGE_TYPES: "base srcds css csgo"
 
