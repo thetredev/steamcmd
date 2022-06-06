@@ -8,7 +8,7 @@ on:
 env:
   DOCKER_BUILDKIT: 1
   REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
-  DOCKER_IMAGE_TYPES: "base srcds bms csgo css dods gm hl2mp l4d l4d2"
+  DOCKER_IMAGE_BASE_ORDER: "base srcds"
 
 jobs:
   build:
@@ -23,13 +23,25 @@ jobs:
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build and push latest images
+      - name: Build and push latest base images
         run: |
-          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
-            docker-compose build ${docker_image_type}
+          for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
+            docker-compose build ${docker_base_image_type}
 
-            src_docker_image=${REGISTRY_IMAGE}:${docker_image_type}
-            dst_docker_image=${REGISTRY_IMAGE}:${docker_image_type}-latest
+            src_docker_image=${REGISTRY_IMAGE}:${docker_base_image_type}
+            dst_docker_image=${REGISTRY_IMAGE}:${docker_base_image_type}-latest
+
+            docker tag ${src_docker_image} ${dst_docker_image}
+            docker push ${dst_docker_image}
+          done
+
+      - name: Build and push latest SRCDS-based game images
+        run: |
+          for docker_srcds_game in $(ls image/games/srcds); do
+            docker-compose build ${docker_srcds_game}
+
+            src_docker_image=${REGISTRY_IMAGE}:${docker_srcds_game}
+            dst_docker_image=${REGISTRY_IMAGE}:${docker_srcds_game}-latest
 
             docker tag ${src_docker_image} ${dst_docker_image}
             docker push ${dst_docker_image}

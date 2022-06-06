@@ -11,7 +11,7 @@ on:
 env:
   DOCKER_BUILDKIT: 1
   REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-build"
-  DOCKER_IMAGE_TYPES: "base srcds bms csgo css dods gm hl2mp l4d l4d2"
+  DOCKER_IMAGE_BASE_ORDER: "base srcds"
 
 jobs:
   build:
@@ -20,8 +20,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Build images
+      - name: Build base images
         run: |
-          for docker_image_type in ${DOCKER_IMAGE_TYPES}; do
-            docker-compose build ${docker_image_type}
+          for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
+            docker-compose build ${docker_base_image_type}
+          done
+
+      - name: Build SRCDS-based game images
+        run: |
+          for docker_srcds_game in $(ls image/games/srcds); do
+            docker-compose build ${docker_srcds_game}
           done
