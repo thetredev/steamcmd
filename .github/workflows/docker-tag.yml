@@ -7,8 +7,11 @@ on:
 
 env:
   DOCKER_BUILDKIT: 1
-  REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
+  REGISTRY_IMAGE: "${{ github.repository_owner }}/${{ github.event.repository.name }}"
+  GHCR_PREFIX: "ghcr.io"
+  DOCKER_HUB_PREFIX: "docker.io"
   DOCKER_IMAGE_BASE_ORDER: "base srcds hlds"
+  DOCKER_RETAG_SH: ".github/scripts/docker_retag.sh"
 
 jobs:
   retag:
@@ -23,35 +26,38 @@ jobs:
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_ACCESS }}" | docker login docker.io -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
       - name: Publish tagged base images
         run: |
           for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
-            src_docker_image=${REGISTRY_IMAGE}:${docker_base_image_type}-latest
-            dst_docker_image=${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
+            docker pull "${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest"
 
-            docker pull ${src_docker_image}
-            docker tag ${src_docker_image} ${dst_docker_image}
-            docker push ${dst_docker_image}
+            bash ${DOCKER_RETAG_SH} \
+              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest \
+              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }} \
+              ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
           done
 
       - name: Publish tagged HLDS-based game images
         run: |
           for docker_hlds_game in $(ls image/games/hlds); do
-            src_docker_image=${REGISTRY_IMAGE}:${docker_hlds_game}-latest
-            dst_docker_image=${REGISTRY_IMAGE}:${docker_hlds_game}-${{ github.ref_name }}
+            docker pull "${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_hlds_game}-latest"
 
-            docker pull ${src_docker_image}
-            docker tag ${src_docker_image} ${dst_docker_image}
-            docker push ${dst_docker_image}
+            bash ${DOCKER_RETAG_SH} \
+              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_hlds_game}-latest \
+              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_hlds_game}-${{ github.ref_name }} \
+              ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_hlds_game}-${{ github.ref_name }}
           done
 
       - name: Publish tagged SRCDS-based game images
         run: |
           for docker_srcds_game in $(ls image/games/srcds); do
-            src_docker_image=${REGISTRY_IMAGE}:${docker_srcds_game}-latest
-            dst_docker_image=${REGISTRY_IMAGE}:${docker_srcds_game}-${{ github.ref_name }}
+            docker pull "${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_srcds_game}-latest"
 
-            docker pull ${src_docker_image}
-            docker tag ${src_docker_image} ${dst_docker_image}
-            docker push ${dst_docker_image}
+            bash ${DOCKER_RETAG_SH} \
+              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_srcds_game}-latest \
+              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_srcds_game}-${{ github.ref_name }} \
+              ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_srcds_game}-${{ github.ref_name }}
           done
