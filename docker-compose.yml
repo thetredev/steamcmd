@@ -17,6 +17,24 @@ services:
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:base
 
+  hlds:
+    image: ${REGISTRY_IMAGE}:hlds
+    build:
+      context: image/hlds
+      cache_from:
+        - ${REGISTRY_IMAGE}:hlds
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:base
+
+  cs:
+    image: ${REGISTRY_IMAGE}:cs
+    build:
+      context: image/games/hlds/cs
+      cache_from:
+        - ${REGISTRY_IMAGE}:cs
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+
   bms:
     image: ${REGISTRY_IMAGE}:bms
     build:

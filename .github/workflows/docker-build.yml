@@ -11,7 +11,7 @@ on:
 env:
   DOCKER_BUILDKIT: 1
   REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-build"
-  DOCKER_IMAGE_BASE_ORDER: "base srcds"
+  DOCKER_IMAGE_BASE_ORDER: "base srcds hlds"
 
 jobs:
   build:
@@ -24,6 +24,12 @@ jobs:
         run: |
           for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
             docker-compose build ${docker_base_image_type}
+          done
+
+      - name: Build HLDS-based game images
+        run: |
+          for docker_hlds_game in $(ls image/games/hlds); do
+            docker-compose build ${docker_hlds_game}
           done
 
       - name: Build SRCDS-based game images

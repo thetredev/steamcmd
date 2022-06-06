@@ -14,6 +14,26 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 - It does not operate under the `root` user - a `steamcmd` user with default UID and GID of 5000 each is used instead
 - The server path is changed to `/var/lib/steamcmd/server`
 
+### HLDS image
+- Based on the `base` image
+- Provides a generic base for HLDS-based game servers
+- Provides the script `/opt/server.sh` to manage game servers using a single `tmux` session
+- Provides a `docker-entrypoint.sh` which itself is executed as `root` with always-correct timezone and ownership of server files
+
+The `/opt/server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
+
+### HLDS-based game server images
+- Based on the `hlds` image
+- Adds game server specific environment variables for configuration
+
+Currently supported game server images:
+
+| Game | Docker Image |
+| ---- | ---- |
+| Counter-Strike | `ghcr.io/thetredev/steamcmd:cs-latest` |
+
+See the `compose/hlds` directory for more details.
+
 ### SRCDS image
 - Based on the `base` image
 - Provides a generic base for SRCDS-based game servers
