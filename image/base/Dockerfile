@@ -36,7 +36,7 @@ RUN apk add --no-cache \
 
 
 # Release image
-FROM almalinux:8.6-minimal-20220512
+FROM almalinux:9.0-minimal-20220527
 
 # Build arguments
 ARG TINI_VERSION=v0.19.0
