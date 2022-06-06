@@ -12,7 +12,7 @@ RUN yum-docker quick-install --enablerepo=powertools \
 
 # Set default environment variables
 ENV STEAMCMD_SERVER_APPID=0
-ENV STEAMCMD_SERVER_PORT=0
+ENV STEAMCMD_SERVER_PORT=27015
 ENV STEAMCMD_SERVER_GAME=""
 ENV STEAMCMD_SERVER_MAP=""
 ENV STEAMCMD_SERVER_MAXPLAYERS="+maxplayers 32"
