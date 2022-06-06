@@ -25,7 +25,7 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 
 The `/opt/server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
 
-### Game server images
+### SRCDS-based game server images
 - Based on the `srcds` image
 - Adds game server specific environment variables for configuration
 
@@ -33,10 +33,16 @@ Currently supported game server images:
 
 | Game | Docker Image |
 | ---- | ---- |
+| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:bms-latest` |
 | Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:css-latest` |
 | Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
+| Day of Defeat: Source | `ghcr.io/thetredev/steamcmd:dods-latest` |
+| Garry's Mod | `ghcr.io/thetredev/steamcmd:gm-latest` |
+| Half Life 2: Source | `ghcr.io/thetredev/steamcmd:hl2mp-latest` |
+| Left 4 Dead | `ghcr.io/thetredev/steamcmd:l4d-latest` |
+| Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:l4d2-latest` |
 
-See the `compose` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/docker-compose.multiple.yml`.
+See the `compose/srcds` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/srcds/multiple.yml`.
 
 ## Image repository
 The image repository is: `ghcr.io/thetredev/steamcmd`<br/>

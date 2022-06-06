@@ -17,10 +17,19 @@ services:
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:base
 
+  bms:
+    image: ${REGISTRY_IMAGE}:bms
+    build:
+      context: image/games/srcds/bms
+      cache_from:
+        - ${REGISTRY_IMAGE}:bms
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
   css:
     image: ${REGISTRY_IMAGE}:css
     build:
-      context: image/css
+      context: image/games/srcds/css
       cache_from:
         - ${REGISTRY_IMAGE}:css
       args:
@@ -29,8 +38,53 @@ services:
   csgo:
     image: ${REGISTRY_IMAGE}:csgo
     build:
-      context: image/csgo
+      context: image/games/srcds/csgo
       cache_from:
         - ${REGISTRY_IMAGE}:csgo
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
+  dods:
+    image: ${REGISTRY_IMAGE}:dods
+    build:
+      context: image/games/srcds/dods
+      cache_from:
+        - ${REGISTRY_IMAGE}:dods
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
+  l4d:
+    image: ${REGISTRY_IMAGE}:l4d
+    build:
+      context: image/games/srcds/l4d
+      cache_from:
+        - ${REGISTRY_IMAGE}:l4d
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
+  l4d2:
+    image: ${REGISTRY_IMAGE}:l4d2
+    build:
+      context: image/games/srcds/l4d2
+      cache_from:
+        - ${REGISTRY_IMAGE}:l4d2
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
+  gm:
+    image: ${REGISTRY_IMAGE}:gm
+    build:
+      context: image/games/srcds/gm
+      cache_from:
+        - ${REGISTRY_IMAGE}:gm
+      args:
+        - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+
+  hl2mp:
+    image: ${REGISTRY_IMAGE}:hl2mp
+    build:
+      context: image/games/srcds/hl2mp
+      cache_from:
+        - ${REGISTRY_IMAGE}:hl2mp
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds

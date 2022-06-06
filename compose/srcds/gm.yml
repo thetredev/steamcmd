@@ -1,0 +1,35 @@
+version: '3.7'
+
+networks:
+  srcds:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: 0
+
+services:
+  gm:
+    image: ghcr.io/thetredev/steamcmd:gm-latest
+    container_name: gm
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      TIME_ZONE: Europe/Berlin
+      STEAMCMD_UID: 1000
+      STEAMCMD_GID: 5000
+    ports:
+      - "27015:27015/udp"
+      # enable the TCP one for RCON
+      #- "27015:27015/tcp"
+    volumes:
+      - ./gm:/var/lib/steamcmd/server
+    networks:
+      - srcds
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048

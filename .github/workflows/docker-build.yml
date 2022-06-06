@@ -11,7 +11,7 @@ on:
 env:
   DOCKER_BUILDKIT: 1
   REGISTRY_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-build"
-  DOCKER_IMAGE_TYPES: "base srcds css csgo"
+  DOCKER_IMAGE_TYPES: "base srcds bms csgo css dods gm hl2mp l4d l4d2"
 
 jobs:
   build:
