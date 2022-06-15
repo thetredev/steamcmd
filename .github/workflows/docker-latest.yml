@@ -19,9 +19,112 @@ jobs:
     permissions:
       contents: read
       packages: write
-      security-events: write
     steps:
       - uses: actions/checkout@v3
+
+      - name: Build all images
+        run: |
+          docker_image_types="${DOCKER_IMAGE_BASE_ORDER} $(ls image/games/hlds) $(ls image/games/srcds)"
+
+          for docker_image_type in ${docker_image_types}; do
+            docker-compose build ${docker_image_type}
+          done
+
+      - name: Trivy CVE scan - base
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:base"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - srcds
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:srcds"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - hlds
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:hlds"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/cs
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:cs"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/bms
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:bms"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/csgo
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:csgo"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/css
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:css"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/dods
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:dods"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/gm
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:gm"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/hl2mp
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:hl2mp"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/l4d
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:l4d"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/l4d2
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:l4d2"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -29,48 +132,14 @@ jobs:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_ACCESS }}" | docker login docker.io -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
-      - name: Build and push latest base images
+      - name: Push latest images to registries
         run: |
-          for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
-            docker-compose build ${docker_base_image_type}
+          docker_image_types="${DOCKER_IMAGE_BASE_ORDER} $(ls image/games/hlds) $(ls image/games/srcds)"
 
-            bash ${DOCKER_RETAG_SH} \
-              ${REGISTRY_IMAGE}:${docker_base_image_type} \
-              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest \
-              ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest
+          for docker_image_type in ${docker_image_types}; do
+            docker tag ${REGISTRY_IMAGE}:${docker_image_type} ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+            docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+
+            docker tag ${REGISTRY_IMAGE}:${docker_image_type} ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
           done
-
-      - name: Build and push latest HLDS-based game images
-        run: |
-          for docker_hlds_game in $(ls image/games/hlds); do
-            docker-compose build ${docker_hlds_game}
-
-            bash ${DOCKER_RETAG_SH} \
-              ${REGISTRY_IMAGE}:${docker_hlds_game} \
-              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_hlds_game}-latest \
-              ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_hlds_game}-latest
-          done
-
-      - name: Build and push latest SRCDS-based game images
-        run: |
-          for docker_srcds_game in $(ls image/games/srcds); do
-            docker-compose build ${docker_srcds_game}
-
-            bash ${DOCKER_RETAG_SH} \
-              ${REGISTRY_IMAGE}:${docker_srcds_game} \
-              ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_srcds_game}-latest \
-              ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_srcds_game}-latest
-          done
-
-      - name: Run Trivy vulnerability scanner - SRCDS image
-        uses: aquasecurity/trivy-action@4b9b6fb4ef28b31450391a93ade098bb00de584e
-        with:
-          image-ref: "${{ env.GHCR_PREFIX }}:srcds-latest"
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results.sarif'

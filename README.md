@@ -71,6 +71,8 @@ The GitHub Actions workflows are setup in the following way:
 - Pushes to the `main` branch lead to the image tags `ghcr.io/thetredev/steamcmd:<image>-latest`, where `<image>` is one of the following: `base`, `srcds`, and any game servers a `Dockerfile` is provided for (see *the supported game server images* above)
 - Pushes of tags lead to retagging the `ghcr.io/thetredev/steamcmd:<image>-latest` images to `ghcr.io/thetredev/steamcmd:<image>-<tag>`
 
+All image builds are scanned for CVEs and only pushed as `latest` or the given tag if no CVEs are found. The scans can be viewed publicly [from within the Actions tab](https://github.com/thetredev/steamcmd/actions) at job **build**.
+
 ## Known bugs
 See the [project issues](https://github.com/thetredev/steamcmd/issues).
 
