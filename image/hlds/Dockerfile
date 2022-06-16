@@ -4,7 +4,7 @@ FROM ${REGISTRY_BASE_IMAGE}
 # Switch to root user for this image
 USER root
 
-# Install required packages for SRCDS execution
+# Install required packages for HLDS management
 RUN yum-docker quick-install \
         ncurses-libs.i686
 
