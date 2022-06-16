@@ -1,7 +1,7 @@
 ARG REGISTRY_BASE_IMAGE
 FROM ${REGISTRY_BASE_IMAGE}
 
-# Define a default SRCDS environment for CS:GO
+# Define a default SRCDS environment for Counter-Strike: Global Offensive
 ENV STEAMCMD_SERVER_APPID=740
 ENV STEAMCMD_SERVER_GAME=csgo
 ENV STEAMCMD_SERVER_MAP=de_dust2

@@ -1,7 +1,7 @@
 ARG REGISTRY_BASE_IMAGE
 FROM ${REGISTRY_BASE_IMAGE}
 
-# Define a default SRCDS environment for Hl2:DM
+# Define a default SRCDS environment for Half-Life 2: Deathmatch
 ENV STEAMCMD_SERVER_APPID=232370
 ENV STEAMCMD_SERVER_GAME=hl2mp
 ENV STEAMCMD_SERVER_MAP=dm_lockdown

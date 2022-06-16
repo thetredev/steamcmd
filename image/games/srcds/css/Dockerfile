@@ -1,7 +1,7 @@
 ARG REGISTRY_BASE_IMAGE
 FROM ${REGISTRY_BASE_IMAGE}
 
-# Define a default SRCDS environment for CS:S
+# Define a default SRCDS environment for Coutner-Strike: Source
 ENV STEAMCMD_SERVER_APPID=232330
 ENV STEAMCMD_SERVER_GAME=cstrike
 ENV STEAMCMD_SERVER_MAP=de_dust2

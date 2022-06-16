@@ -1,7 +1,7 @@
 ARG REGISTRY_BASE_IMAGE
 FROM ${REGISTRY_BASE_IMAGE}
 
-# Define a default SRCDS environment for L4D2
+# Define a default SRCDS environment for Garry's Mod
 ENV STEAMCMD_SERVER_APPID=4020
 ENV STEAMCMD_SERVER_GAME=garrysmod
 ENV STEAMCMD_SERVER_MAP=gm_construct
