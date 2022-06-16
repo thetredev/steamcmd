@@ -57,7 +57,7 @@ Currently supported game server images:
 | Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 | Day of Defeat: Source | `ghcr.io/thetredev/steamcmd:dods-latest` |
 | Garry's Mod | `ghcr.io/thetredev/steamcmd:gm-latest` |
-| Half Life 2: Source | `ghcr.io/thetredev/steamcmd:hl2mp-latest` |
+| Half Life 2: Deathmatch | `ghcr.io/thetredev/steamcmd:hl2mp-latest` |
 | Left 4 Dead | `ghcr.io/thetredev/steamcmd:l4d-latest` |
 | Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:l4d2-latest` |
 
