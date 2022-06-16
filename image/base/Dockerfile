@@ -85,7 +85,7 @@ RUN yum-docker quick-install \
         # Disable root login
         chsh -s /usr/sbin/nologin root \
     && \
-        # Install and configure gosu
+        # Install and configure tini
         curl -fsSL -o /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-amd64" && \
         chmod +x /usr/local/bin/tini \
     && \
