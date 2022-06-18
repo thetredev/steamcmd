@@ -61,7 +61,8 @@ COPY . /
 COPY --from=gosu-builder /go/bin/gosu-amd64 /usr/local/bin/gosu
 
 # Configure system
-RUN yum-docker quick-install \
+RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf && \
+    yum-docker quick-install \
         # basic system packages
         glibc-langpack-en \
         util-linux-user \
