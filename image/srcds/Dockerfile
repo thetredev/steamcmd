@@ -4,6 +4,9 @@ FROM ${REGISTRY_BASE_IMAGE}
 # Switch to root user for this image
 USER root
 
+# Temporarily switch workdir to /tmp
+WORKDIR /tmp
+
 # Install required packages for SRCDS execution
 RUN yum-docker quick-install \
         ncurses-libs.i686 \
@@ -18,7 +21,11 @@ RUN ln -sf $(ls /usr/lib/libncurses++.so.6) /usr/lib/libncurses++.so.5 && \
     ln -sf $(ls /usr/lib/libncursesw.so.6) /usr/lib/libncursesw.so.5 && \
     ln -sf $(ls /usr/lib/libncurses++.so.6) /usr/lib/libncurses++.so.5 && \
     ln -sf $(ls /usr/lib/libtinfo.so.6) /usr/lib/libtinfo.so.5 && \
-    ldconfig
+    ldconfig && \
+    rm -rf /tmp/*
+
+# Switch back workdir to SteamCMD server home
+WORKDIR ${STEAMCMD_SERVER_HOME}
 
 # Set default environment variables
 ENV STEAMCMD_SERVER_APPID=0
