@@ -11,20 +11,33 @@ services:
   srcds:
     image: ${REGISTRY_IMAGE}:srcds
     build:
-      context: image/srcds
+      dockerfile: ../Dockerfile
+      context: image/games/base/srcds
       cache_from:
         - ${REGISTRY_IMAGE}:srcds
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:base
+        - STEAMCMD_SERVER_PORT=27015
+        - STEAMCMD_SERVER_MAXPLAYERS="+maxplayers 32"
+        - STEAMCMD_SERVER_MINRATE=8000
+        - STEAMCMD_SERVER_TICKRATE=128
+        - STEAMCMD_SERVER_FPSMAX=300
+        - STEAMCMD_SERVER_THREADS=3
+        - STEAMCMD_SERVER_SESSION_NAME=srcds
 
   hlds:
     image: ${REGISTRY_IMAGE}:hlds
     build:
-      context: image/hlds
+      dockerfile: ../Dockerfile
+      context: image/games/base/hlds
       cache_from:
         - ${REGISTRY_IMAGE}:hlds
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:base
+        - STEAMCMD_SERVER_APPID=90
+        - STEAMCMD_SERVER_PORT=27015
+        - STEAMCMD_SERVER_MAXPLAYERS=32
+        - STEAMCMD_SERVER_SESSION_NAME=hlds
 
   cs:
     image: ${REGISTRY_IMAGE}:cs
