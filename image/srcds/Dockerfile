@@ -15,12 +15,12 @@ RUN yum-docker quick-install \
 
 # Link ncurses and tinfo libs version 6 to 5 as described in
 # https://access.redhat.com/solutions/6907421
-RUN ln -sf $(ls /usr/lib/libncurses++.so.6) /usr/lib/libncurses++.so.5 && \
-    ln -sf $(ls /usr/lib/libncurses++w.so.6) /usr/lib/libncurses++w.so.5 && \
-    ln -sf $(ls /usr/lib/libncurses.so.6) /usr/lib/libncurses.so.5 && \
-    ln -sf $(ls /usr/lib/libncursesw.so.6) /usr/lib/libncursesw.so.5 && \
-    ln -sf $(ls /usr/lib/libncurses++.so.6) /usr/lib/libncurses++.so.5 && \
-    ln -sf $(ls /usr/lib/libtinfo.so.6) /usr/lib/libtinfo.so.5 && \
+RUN ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
+    ln -sf /usr/lib/libncurses++w.so.6 /usr/lib/libncurses++w.so.5 && \
+    ln -sf /usr/lib/libncurses.so.6 /usr/lib/libncurses.so.5 && \
+    ln -sf /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.5 && \
+    ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
+    ln -sf /usr/lib/libtinfo.so.6 /usr/lib/libtinfo.so.5 && \
     ldconfig && \
     rm -rf /tmp/*
 
