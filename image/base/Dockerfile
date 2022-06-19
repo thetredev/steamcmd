@@ -43,16 +43,16 @@ ARG TINI_VERSION=v0.19.0
 
 # Prepare image environment
 ## SteamCMD
-ENV STEAMCMD_INSTALL_DIR=/home/steamcmd/package
-ENV STEAMCMD_SERVER_HOME=/var/lib/steamcmd/server
-ENV STEAMCMD_UID=5000
-ENV STEAMCMD_GID=5000
+ENV STEAMCMD_INSTALL_DIR=/home/steamcmd/package \
+    STEAMCMD_SERVER_HOME=/var/lib/steamcmd/server \
+    STEAMCMD_UID=5000 \
+    STEAMCMD_GID=5000 \
 ## System
-ENV TIME_ZONE=UTC
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US
-ENV LC_ALL=C
-ENV PATH=${PATH}:${STEAMCMD_INSTALL_DIR}
+    TIME_ZONE=UTC \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US \
+    LC_ALL=C \
+    PATH=${PATH}:${STEAMCMD_INSTALL_DIR}
 
 # Copy build context into image
 COPY . /
