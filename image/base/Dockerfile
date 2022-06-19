@@ -91,7 +91,6 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         ln -sf /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.5 && \
         ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
         ln -sf /usr/lib/libtinfo.so.6 /usr/lib/libtinfo.so.5 && \
-        ldconfig && \
         rm -rf /tmp/* \
     && \
         # Disable root login
