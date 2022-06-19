@@ -23,6 +23,8 @@ services:
       #- "27015:27015/tcp"
     volumes:
       - ./css:/var/lib/steamcmd/server
+      # shared tmux socket directory:
+      #- /tmp/steamcmd:/tmp/steamcmd
     networks:
       - srcds
     security_opt:
@@ -58,6 +60,8 @@ services:
       #- "27016:27016/tcp"
     volumes:
       - ./csgo:/var/lib/steamcmd/server
+      # shared tmux socket directory:
+      #- /tmp/steamcmd:/tmp/steamcmd
     networks:
       - srcds
     security_opt:

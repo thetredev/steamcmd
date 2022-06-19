@@ -23,6 +23,8 @@ services:
       #- "27015:27015/tcp"
     volumes:
       - ./cs:/var/lib/steamcmd/server
+      # shared tmux socket directory:
+      #- /tmp/steamcmd:/tmp/steamcmd
     networks:
       - hlds
     security_opt:
