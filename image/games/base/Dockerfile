@@ -33,9 +33,6 @@ COPY . /
 # Switch to root user for this image
 USER root
 
-# Symlink /opt/server.sh to /usr/bin/server.sh
-RUN ln -sf /opt/server.sh /usr/bin/server.sh
-
 # Declare SRCDS health check
 HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \
     CMD server.sh healthy
