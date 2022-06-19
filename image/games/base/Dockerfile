@@ -1,5 +1,5 @@
 ARG REGISTRY_BASE_IMAGE
-FROM ${REGISTRY_BASE_IMAGE}
+FROM ${REGISTRY_BASE_IMAGE} AS release
 
 # Set build arguments
 ARG STEAMCMD_SERVER_APPID=0 \
@@ -28,8 +28,24 @@ ENV STEAMCMD_SERVER_APPID=${STEAMCMD_SERVER_APPID} \
     STEAMCMD_SERVER_SESSION_NAME=${STEAMCMD_SERVER_SESSION_NAME} \
     STEAMCMD_SERVER_SESSION_SOCKET="/tmp/steamcmd/${STEAMCMD_SERVER_SESSION_NAME}.sock"
 
-# Copy build context into image
-COPY . /
+
+# Temporary build stage to get the build context for the specific engine only
+FROM release AS context
+USER root
+
+WORKDIR /tmp/context-tmp
+COPY . .
+
+WORKDIR /tmp/context
+RUN mv -f /tmp/context-tmp/docker-entrypoint.sh /tmp/context && \
+    mv -f /tmp/context-tmp/usr /tmp/context && \
+    cp -r /tmp/context-tmp/${STEAMCMD_SERVER_SESSION_NAME}/* /tmp/context && \
+    rm -rf /tmp/context-tmp
+
+
+# Continue building the main stage
+FROM release
+COPY --from=context /tmp/context /
 
 # Switch to root user for this image
 USER root

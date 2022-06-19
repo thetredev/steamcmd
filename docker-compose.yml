@@ -11,8 +11,7 @@ services:
   srcds:
     image: ${REGISTRY_IMAGE}:srcds
     build:
-      dockerfile: ../Dockerfile
-      context: image/games/base/srcds
+      context: image/games/base
       cache_from:
         - ${REGISTRY_IMAGE}:srcds
       args:
@@ -28,8 +27,7 @@ services:
   hlds:
     image: ${REGISTRY_IMAGE}:hlds
     build:
-      dockerfile: ../Dockerfile
-      context: image/games/base/hlds
+      context: image/games/base
       cache_from:
         - ${REGISTRY_IMAGE}:hlds
       args:
