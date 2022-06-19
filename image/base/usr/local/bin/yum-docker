@@ -12,11 +12,6 @@ clean() {
     microdnf -y clean all
 }
 
-update() {
-    microdnf -y update
-    clean
-}
-
 quick-install() {
     install ${@}
     clean

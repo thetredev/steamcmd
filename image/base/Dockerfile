@@ -61,7 +61,9 @@ COPY . /
 COPY --from=gosu-builder /go/bin/gosu-amd64 /usr/local/bin/gosu
 
 # Configure system
-RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf && \
+WORKDIR /tmp
+
+RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
     yum-docker quick-install \
         # basic system packages
         glibc-langpack-en \
@@ -76,12 +78,21 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf && \
         passwd \
         shadow-utils \
         # required packages for SteamCMD
-        glibc.i686 \
-        libgcc.i686 \
-        libstdc++.i686 \
+        ncurses-libs.i686 \
+        SDL2.i686 \
     && \
         # Update CA trust
         update-ca-trust \
+    && \
+        # Link ncurses and tinfo libs version 6 to 5
+        ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
+        ln -sf /usr/lib/libncurses++w.so.6 /usr/lib/libncurses++w.so.5 && \
+        ln -sf /usr/lib/libncurses.so.6 /usr/lib/libncurses.so.5 && \
+        ln -sf /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.5 && \
+        ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
+        ln -sf /usr/lib/libtinfo.so.6 /usr/lib/libtinfo.so.5 && \
+        ldconfig && \
+        rm -rf /tmp/* \
     && \
         # Disable root login
         chsh -s /usr/sbin/nologin root \
