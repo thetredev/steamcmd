@@ -46,9 +46,9 @@ ARG TINI_VERSION=v0.19.0
 ENV STEAMCMD_INSTALL_DIR=/home/steamcmd/package \
     STEAMCMD_SERVER_HOME=/var/lib/steamcmd/server \
     STEAMCMD_UID=5000 \
-    STEAMCMD_GID=5000 \
+    STEAMCMD_GID=5000
 ## System
-    TIME_ZONE=UTC \
+ENV TIME_ZONE=UTC \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US \
     LC_ALL=C \
