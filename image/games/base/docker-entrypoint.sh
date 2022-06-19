@@ -21,6 +21,9 @@ if [ $(id -u) -eq 0 ]; then
     # Change ownership of steamcmd server folder to new steamcmd GID and UID
     chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_HOME}
 
+    # Change ownership of tmux session folder to new steamcmd GID and UID
+    chown -R steamcmd:steamcmd $(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
+
     # Call to gosu to drop from root user to steamcmd user
     # when running original entrypoint
     set -- gosu steamcmd $@
