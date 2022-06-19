@@ -5,6 +5,10 @@ if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
 fi
 
 
+# Prefix tmux with shared session socket
+TMUX_CMD="tmux -S ${STEAMCMD_SERVER_SESSION_SOCKET}"
+
+
 SIGNAL_HLDS_HEALTHY="Connection to Steam servers successful."
 SIGNAL_HLDS_UPDATE_FAILED="Error! App '90' state is 0x10E after update job."
 
@@ -27,12 +31,12 @@ _is_running() {
 
 
 healthy() {
-    return $(tmux capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_HLDS_HEALTHY}" > /dev/null)
+    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_HLDS_HEALTHY}" > /dev/null)
 }
 
 
 clear_console() {
-    tmux send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "clear" "Enter"
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "clear" "Enter"
 }
 
 
@@ -43,12 +47,12 @@ wait() {
 
 
 attach() {
-    tmux a -t ${STEAMCMD_SERVER_SESSION_NAME}
+    ${TMUX_CMD} a -t ${STEAMCMD_SERVER_SESSION_NAME}
 }
 
 
 update_restart_needed() {
-    return $(tmux capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_HLDS_UPDATE_FAILED}" > /dev/null)
+    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_HLDS_UPDATE_FAILED}" > /dev/null)
 }
 
 
@@ -60,13 +64,13 @@ update() {
 
     echo ${MESSAGE_STEAMCMD_UPDATE_STARTED}
 
-    tmux send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "steamcmd \
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "steamcmd \
         +force_install_dir ${STEAMCMD_SERVER_HOME} \
         +login anonymous \
         +app_update ${STEAMCMD_SERVER_APPID} validate \
-        +quit; tmux wait-for -S steamcmd-update-finished" "Enter"
+        +quit; ${TMUX_CMD} wait-for -S steamcmd-update-finished" "Enter"
 
-    tmux wait-for steamcmd-update-finished
+    ${TMUX_CMD} wait-for steamcmd-update-finished
     echo ${MESSAGE_STEAMCMD_UPDATE_FINISHED}
 
     return 0
@@ -87,7 +91,7 @@ run() {
     echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
     hlds_game=$(_get_hlds_game)
 
-    tmux send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "cd ${STEAMCMD_SERVER_HOME}; bash ./hlds_run \
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "cd ${STEAMCMD_SERVER_HOME}; bash ./hlds_run \
         -console \
         -game ${STEAMCMD_SERVER_GAME} \
         +ip 0.0.0.0 \
