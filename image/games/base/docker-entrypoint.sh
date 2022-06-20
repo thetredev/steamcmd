@@ -29,6 +29,7 @@ if [ $(id -u) -eq 0 ]; then
     # Change ownership of tmux session folder to new steamcmd GID and UID
     tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
     echo "Fixing ownership of ${tmux_socket_dir}"
+    mkdir -p ${tmux_socket_dir}
     chown -R steamcmd:steamcmd ${tmux_socket_dir}
 
     # Call to gosu to drop from root user to steamcmd user
