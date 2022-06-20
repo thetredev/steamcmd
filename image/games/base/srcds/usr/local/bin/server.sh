@@ -36,6 +36,10 @@ healthy() {
 
 wait() {
     until ! _is_running srcds; do :; done
+
+    ${TMUX_CMD} kill-session ${STEAMCMD_SERVER_SESSION_NAME}
+    ${TMUX_CMD} kill-server
+
     return 0
 }
 
