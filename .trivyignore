@@ -1,0 +1,8 @@
+# Ignore CVEs according to https://github.com/tianon/gosu/issues/104
+
+## does not use capabilities
+CVE-2022-29162
+CVE-2022-24769
+
+## vulnerable runc code not used
+CVE-2021-43784
