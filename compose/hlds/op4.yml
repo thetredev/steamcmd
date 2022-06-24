@@ -1,0 +1,37 @@
+version: '3.7'
+
+networks:
+  hlds:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: 0
+
+services:
+  op4:
+    image: ghcr.io/thetredev/steamcmd:op4-latest
+    container_name: op4
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      TIME_ZONE: Europe/Berlin
+      STEAMCMD_UID: 1000
+      STEAMCMD_GID: 5000
+    ports:
+      - "27015:27015/udp"
+      # enable the TCP one for RCON
+      #- "27015:27015/tcp"
+    volumes:
+      - ./op4:/var/lib/steamcmd/server
+      # shared tmux socket directory:
+      #- /tmp/steamcmd:/tmp/steamcmd
+    networks:
+      - hlds
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048

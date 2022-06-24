@@ -63,6 +63,7 @@ _update() {
     ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "steamcmd \
         +force_install_dir ${STEAMCMD_SERVER_HOME} \
         +login anonymous \
+        ${STEAMCMD_SERVER_APP_CONFIG} \
         +app_update ${STEAMCMD_SERVER_APPID} validate \
         +quit; ${TMUX_CMD} wait-for -S steamcmd-update-finished" "Enter"
 

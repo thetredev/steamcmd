@@ -32,9 +32,17 @@ Currently supported game server images:
 
 | Game | Docker Image |
 | ---- | ---- |
+| Half-Life | `ghcr.io/thetredev/steamcmd:hlmp-latest` |
+| Half-Life: Opposing Force | `ghcr.io/thetredev/steamcmd:op4-latest` |
 | Counter-Strike | `ghcr.io/thetredev/steamcmd:cs-latest` |
+| Counter-Strike: Condition Zero | `ghcr.io/thetredev/steamcmd:czero-latest` |
+| Day of Defeat | `ghcr.io/thetredev/steamcmd:dod-latest` |
+| Deathmatch Classic | `ghcr.io/thetredev/steamcmd:dmc-latest` |
+| Team Fortress Classic | `ghcr.io/thetredev/steamcmd:tfc-latest` |
 
 See the `compose/hlds` directory for more details.
+
+**Note**: Ricochet seems like it's not available anymore.
 
 ### SRCDS image
 - Based on the `base` image

@@ -1,0 +1,9 @@
+ARG REGISTRY_BASE_IMAGE
+FROM ${REGISTRY_BASE_IMAGE}
+
+# Define a default HLDS environment for Counter-Strike: Condition Zero
+ENV STEAMCMD_SERVER_APP_CONFIG="+app_set_config 90 mod czero" \
+    STEAMCMD_SERVER_GAME=czero \
+    STEAMCMD_SERVER_MAP=de_dust2_cz
+
+ENV STEAMCMD_SERVER_SESSION_NAME=${STEAMCMD_SERVER_GAME}
