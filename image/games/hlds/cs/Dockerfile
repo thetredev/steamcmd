@@ -1,7 +1,0 @@
-ARG REGISTRY_BASE_IMAGE
-FROM ${REGISTRY_BASE_IMAGE}
-
-# Define a default HLDS environment for Counter-Strike
-ENV STEAMCMD_SERVER_GAME=cstrike \
-    STEAMCMD_SERVER_MAP=de_dust2 \
-    STEAMCMD_SERVER_SESSION_NAME=cs

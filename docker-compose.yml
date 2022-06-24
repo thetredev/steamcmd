@@ -40,65 +40,98 @@ services:
   cs:
     image: ${REGISTRY_IMAGE}:cs
     build:
-      context: image/games/hlds/cs
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:cs
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_GAME=cstrike
+        - STEAMCMD_SERVER_MAP=de_dust2
+        - STEAMCMD_SERVER_SESSION_NAME=cs
 
   hlmp:
     image: ${REGISTRY_IMAGE}:hlmp
     build:
-      context: image/games/hlds/hlmp
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:hlmp
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_GAME=valve
+        - STEAMCMD_SERVER_MAP=c1a1
+        - STEAMCMD_SERVER_SESSION_NAME=hlmp
 
   czero:
     image: ${REGISTRY_IMAGE}:czero
     build:
-      context: image/games/hlds/czero
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:czero
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_APP_CONFIG="+app_set_config 90 mod czero"
+        - STEAMCMD_SERVER_GAME=czero
+        - STEAMCMD_SERVER_MAP=de_dust2_cz
+        - STEAMCMD_SERVER_SESSION_NAME=czero
 
   dod:
     image: ${REGISTRY_IMAGE}:dod
     build:
-      context: image/games/hlds/dod
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:dod
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_APP_CONFIG="+app_set_config 90 mod dod"
+        - STEAMCMD_SERVER_GAME=dod
+        - STEAMCMD_SERVER_MAP=dod_donner
+        - STEAMCMD_SERVER_SESSION_NAME=dod
 
   dmc:
     image: ${REGISTRY_IMAGE}:dmc
     build:
-      context: image/games/hlds/dmc
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:dmc
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_APP_CONFIG="+app_set_config 90 mod dmc"
+        - STEAMCMD_SERVER_GAME=dmc
+        - STEAMCMD_SERVER_MAP=dmc_dm2
+        - STEAMCMD_SERVER_SESSION_NAME=dmc
 
   op4:
     image: ${REGISTRY_IMAGE}:op4
     build:
-      context: image/games/hlds/op4
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:op4
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_APP_CONFIG="+app_set_config 90 mod gearbox"
+        - STEAMCMD_SERVER_GAME=gearbox
+        - STEAMCMD_SERVER_MAP=op4_demise
+        - STEAMCMD_SERVER_SESSION_NAME=op4
 
   tfc:
     image: ${REGISTRY_IMAGE}:tfc
     build:
-      context: image/games/hlds/tfc
+      context: image/games
+      dockerfile: Dockerfile.hlds
       cache_from:
         - ${REGISTRY_IMAGE}:tfc
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:hlds
+        - STEAMCMD_SERVER_APP_CONFIG="+app_set_config 90 mod tfc"
+        - STEAMCMD_SERVER_GAME=tfc
+        - STEAMCMD_SERVER_MAP=2fort
+        - STEAMCMD_SERVER_SESSION_NAME=tfc
 
   bms:
     image: ${REGISTRY_IMAGE}:bms
