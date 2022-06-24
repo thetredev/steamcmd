@@ -27,26 +27,17 @@ jobs:
             docker-compose build ${docker_base_image_type}
           done
 
-          for docker_hlds_game in $(ls image/games/hlds); do
-            docker-compose build ${docker_hlds_game}
-          done
+          docker_base_images_egrep=$(echo ${DOCKER_IMAGE_BASE_ORDER} | tr " " "|")
+          docker_game_images=$(docker-compose config --services | grep -Evw "(${docker_base_images_egrep})" | paste -sd " " -)
 
-          for docker_srcds_game in $(ls image/games/srcds); do
-            docker-compose build ${docker_srcds_game}
+          for docker_game_image in ${docker_game_images}; do
+            docker-compose build ${docker_game_image}
           done
 
       - name: Trivy CVE scan - base
         uses: aquasecurity/trivy-action@0.4.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:base"
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
-      - name: Trivy CVE scan - srcds
-        uses: aquasecurity/trivy-action@0.4.0
-        with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:srcds"
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
@@ -59,10 +50,66 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Trivy CVE scan - srcds
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:srcds"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/hlmp
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:hlmp"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
       - name: Trivy CVE scan - games/hlds/cs
         uses: aquasecurity/trivy-action@0.4.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:cs"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/czero
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:czero"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/dod
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:dod"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/dmc
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:dmc"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/op4
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:op4"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/hlds/tfc
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:tfc"
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
@@ -75,18 +122,18 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
-      - name: Trivy CVE scan - games/srcds/csgo
-        uses: aquasecurity/trivy-action@0.4.0
-        with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:csgo"
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
       - name: Trivy CVE scan - games/srcds/css
         uses: aquasecurity/trivy-action@0.4.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:css"
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Trivy CVE scan - games/srcds/csgo
+        uses: aquasecurity/trivy-action@0.4.0
+        with:
+          image-ref: "${{ env.REGISTRY_IMAGE }}:csgo"
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'

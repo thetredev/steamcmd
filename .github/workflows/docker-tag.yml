@@ -38,7 +38,7 @@ jobs:
 
       - name: Push tagged images to registries
         run: |
-          docker_image_types="${DOCKER_IMAGE_BASE_ORDER} $(ls image/games/hlds) $(ls image/games/srcds)"
+          docker_image_types=$(docker-compose config --services | paste -sd " " -)
 
           for docker_image_type in ${docker_image_types}; do
             docker pull ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
