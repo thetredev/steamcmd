@@ -93,6 +93,13 @@ RUN curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz 
         # [S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.
         ln -sf "$(pwd)/linux32" "${HOME}/.steam/sdk32"
 
+# Link SteamCMD libstdc++ library to system
+USER root
+RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32/libstdc++.so.6 /usr/lib/libstdc++.so.6
+
+# Set default user to steamcmd
+USER steamcmd
+
 # Set default workdir to SteamCMD server dir
 WORKDIR ${STEAMCMD_SERVER_HOME}
 
