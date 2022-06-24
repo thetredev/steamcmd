@@ -53,7 +53,7 @@ COPY --from=context /tmp/context /
 # Switch to root user for this image
 USER root
 
-# Declare SRCDS health check
+# Declare server health check
 HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \
     CMD server.sh healthy
 
