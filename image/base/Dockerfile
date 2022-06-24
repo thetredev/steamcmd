@@ -28,6 +28,7 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         # basic system packages
         glibc-langpack-en \
         util-linux-user \
+        ncurses \
         # basic tools
         file \
         zip \

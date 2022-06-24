@@ -9,17 +9,27 @@ source /usr/local/lib/steamcmd/server-common.sh hlds
 
 
 # Define HLDS-specific signals
-SIGNAL_HLDS_UPDATE_FAILED="Error! App '90' state is 0x10E after update job."
+SIGNAL_HLDS_UPDATE_FAILED="Error! App '90' state is 0x[0-9a-fA-f]{1,6} after update job."
 
 
 # Define HLDS-specific functions
-clear_console() {
-    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "clear" "Enter"
+_clear_console() {
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "clear && printf '\e[3J'" "Enter"
 }
 
 
-update_restart_needed() {
-    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_HLDS_UPDATE_FAILED}" > /dev/null)
+_update_restart_needed() {
+    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | egrep "${SIGNAL_HLDS_UPDATE_FAILED}" > /dev/null)
+}
+
+
+update() {
+    _update
+
+    while _update_restart_needed; do
+        _clear_console
+        _update
+    done
 }
 
 

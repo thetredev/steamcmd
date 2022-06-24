@@ -20,6 +20,11 @@ EOF_TICKRATE_ENABLER_CFG
 }
 
 
+update() {
+    _update
+}
+
+
 run() {
     if _is_running steamcmd; then
         echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}

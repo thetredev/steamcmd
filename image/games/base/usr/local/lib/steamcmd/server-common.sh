@@ -52,7 +52,7 @@ attach() {
 }
 
 
-update() {
+_update() {
     if _is_running steamcmd; then
         echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
         return 1
