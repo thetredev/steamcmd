@@ -136,71 +136,113 @@ services:
   bms:
     image: ${REGISTRY_IMAGE}:bms
     build:
-      context: image/games/srcds/bms
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:bms
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=346680
+        - STEAMCMD_SERVER_GAME=bms
+        - STEAMCMD_SERVER_MAP=dm_bounce
+        - STEAMCMD_SERVER_SESSION_NAME=bms
 
   css:
     image: ${REGISTRY_IMAGE}:css
     build:
-      context: image/games/srcds/css
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:css
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=232330
+        - STEAMCMD_SERVER_GAME=cstrike
+        - STEAMCMD_SERVER_MAP=de_dust2
+        - STEAMCMD_SERVER_TICKRATE=67
+        - STEAMCMD_SERVER_SESSION_NAME=css
 
   csgo:
     image: ${REGISTRY_IMAGE}:csgo
     build:
-      context: image/games/srcds/csgo
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:csgo
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=750
+        - STEAMCMD_SERVER_GAME=csgo
+        - STEAMCMD_SERVER_MAP=de_dust2
+        - STEAMCMD_SERVER_MAXPLAYERS="-maxplayers_override 32"
+        - STEAMCMD_SERVER_SESSION_NAME=csgo
 
   dods:
     image: ${REGISTRY_IMAGE}:dods
     build:
-      context: image/games/srcds/dods
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:dods
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=232290
+        - STEAMCMD_SERVER_GAME=dod
+        - STEAMCMD_SERVER_MAP=dod_palermo
+        - STEAMCMD_SERVER_SESSION_NAME=dods
 
   l4d:
     image: ${REGISTRY_IMAGE}:l4d
     build:
-      context: image/games/srcds/l4d
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:l4d
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=222840
+        - STEAMCMD_SERVER_GAME=left4dead
+        - STEAMCMD_SERVER_MAP=l4d_hospital01_apartment
+        - STEAMCMD_SERVER_SESSION_NAME=left4dead
 
   l4d2:
     image: ${REGISTRY_IMAGE}:l4d2
     build:
-      context: image/games/srcds/l4d2
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:l4d2
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=222860
+        - STEAMCMD_SERVER_GAME=left4dead2
+        - STEAMCMD_SERVER_MAP=c2m1_highway
+        - STEAMCMD_SERVER_SESSION_NAME=left4dead2
 
   gm:
     image: ${REGISTRY_IMAGE}:gm
     build:
-      context: image/games/srcds/gm
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:gm
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=4020
+        - STEAMCMD_SERVER_GAME=garrysmod
+        - STEAMCMD_SERVER_MAP=gm_construct
+        - STEAMCMD_SERVER_SESSION_NAME=garrysmod
 
   hl2mp:
     image: ${REGISTRY_IMAGE}:hl2mp
     build:
-      context: image/games/srcds/hl2mp
+      context: image/games
+      dockerfile: Dockerfile.srcds
       cache_from:
         - ${REGISTRY_IMAGE}:hl2mp
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
+        - STEAMCMD_SERVER_APPID=232370
+        - STEAMCMD_SERVER_GAME=hl2mp
+        - STEAMCMD_SERVER_MAP=dm_lockdown
+        - STEAMCMD_SERVER_SESSION_NAME=hl2mp
