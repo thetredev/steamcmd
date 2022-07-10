@@ -12,5 +12,6 @@ docker run --rm \
     aquasec/trivy:0.29.2-amd64 image --severity ${2:-CRITICAL,HIGH,MEDIUM,LOW} ${docker_image}
 
 docker run --rm \
+    -v ${git_root}/.dockleignore:/.dockleignore:ro \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     goodwithtech/dockle:v0.4.5-amd64 ${docker_image}

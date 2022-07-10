@@ -1,0 +1,8 @@
+# We need root to change ownership of files and folders at the start of the container
+CIS-DI-0001
+
+# Content trust is not an issue at the moment
+CIS-DI-0005
+
+# The base image lacks a HEALTHCHECK instruction
+CIS-DI-0006
