@@ -19,7 +19,7 @@ _clear_console() {
 
 
 _update_restart_needed() {
-    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | egrep "${SIGNAL_HLDS_UPDATE_FAILED}" > /dev/null)
+    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -E "${SIGNAL_HLDS_UPDATE_FAILED}" > /dev/null)
 }
 
 
