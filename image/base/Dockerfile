@@ -71,7 +71,23 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
     && \
         # Create SteamCMD user
         groupadd -r -g "${STEAMCMD_GID}" steamcmd && \
-        useradd -ms /bin/bash -r -l -u "${STEAMCMD_UID}" -g "${STEAMCMD_GID}" steamcmd
+        useradd -ms /bin/bash -r -l -u "${STEAMCMD_UID}" -g "${STEAMCMD_GID}" steamcmd \
+    && \
+        # Fix dockle/CIS-DI-0008
+        chmod a-s \
+            /usr/bin/chage \
+            /usr/bin/chfn \
+            /usr/bin/chsh \
+            /usr/bin/mount \
+            /usr/bin/umount \
+            /usr/bin/passwd \
+            /usr/bin/gpasswd \
+            /usr/bin/newgrp \
+            /usr/sbin/unix_chkpwd \
+            /usr/bin/su \
+            /usr/sbin/pam_timestamp_check \
+            /usr/libexec/utempter/utempter \
+            /usr/bin/write
 
 # Switch to SteamCMD user
 USER steamcmd
