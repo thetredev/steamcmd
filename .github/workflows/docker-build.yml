@@ -42,6 +42,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - base
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:base"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - hlds
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -49,6 +56,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - hlds
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:hlds"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - srcds
         uses: aquasecurity/trivy-action@0.5.1
@@ -58,6 +72,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - srcds
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:srcds"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/hlds/hlmp
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -65,6 +86,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/hlds/hlmp
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:hlmp"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/cs
         uses: aquasecurity/trivy-action@0.5.1
@@ -74,6 +102,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/hlds/cs
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:cs"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/hlds/czero
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -81,6 +116,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/hlds/czero
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:czero"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/dod
         uses: aquasecurity/trivy-action@0.5.1
@@ -90,6 +132,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/hlds/dod
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:dod"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/hlds/dmc
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -97,6 +146,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/hlds/dmc
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:dmc"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/op4
         uses: aquasecurity/trivy-action@0.5.1
@@ -106,6 +162,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/hlds/op4
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:op4"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/hlds/tfc
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -113,6 +176,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/hlds/tfc
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:tfc"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/bms
         uses: aquasecurity/trivy-action@0.5.1
@@ -122,6 +192,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/srcds/bms
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:bms"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/srcds/css
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -129,6 +206,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/srcds/css
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:css"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/csgo
         uses: aquasecurity/trivy-action@0.5.1
@@ -138,6 +222,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/srcds/csgo
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:csgo"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/srcds/dods
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -145,6 +236,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/srcds/dods
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:dods"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/gm
         uses: aquasecurity/trivy-action@0.5.1
@@ -154,6 +252,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/srcds/gm
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:gm"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/srcds/hl2mp
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -161,6 +266,13 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/srcds/hl2mp
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:hl2mp"
+          exit-code: '1'
+          dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/l4d
         uses: aquasecurity/trivy-action@0.5.1
@@ -170,6 +282,13 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
+      - name: Dockle scan - games/srcds/l4d
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:l4d"
+          exit-code: '1'
+          dockle-version: '0.4.5'
+
       - name: Trivy CVE scan - games/srcds/l4d2
         uses: aquasecurity/trivy-action@0.5.1
         with:
@@ -177,3 +296,10 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Dockle scan - games/srcds/l4d2
+        uses: erzz/dockle-action@v1.3.1
+        with:
+          image: "${{ env.REGISTRY_IMAGE }}:l4d2"
+          exit-code: '1'
+          dockle-version: '0.4.5'
