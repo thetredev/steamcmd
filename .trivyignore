@@ -6,3 +6,7 @@ CVE-2022-24769
 
 ## vulnerable runc code not used
 CVE-2021-43784
+
+## syscall.Faccessat: only applies to kernels < 5.8
+# https://github.com/golang/go/issues/52313#issuecomment-1097210431
+CVE-2022-29526
