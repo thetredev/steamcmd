@@ -34,14 +34,10 @@ update() {
 
 
 run() {
-    if _is_running steamcmd; then
-        echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
-        return 1
-    fi
+    pre_exit_code=$(_run_pre)
 
-    if _is_running hlds; then
-        echo ${MESSAGE_STEAMCMD_SERVER_RUNNING}
-        return 2
+    if ! $pre_exit_code; then
+        return $pre_exit_code
     fi
 
     echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
@@ -55,12 +51,7 @@ run() {
         +maxplayers ${STEAMCMD_SERVER_MAXPLAYERS} \
         +map ${STEAMCMD_SERVER_MAP}" "Enter"
 
-    until healthy; do
-        sleep 5
-        echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
-    done
-
-    echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
+    _run_post
     return 0
 }
 

@@ -72,3 +72,26 @@ _update() {
 
     return 0
 }
+
+
+_run_pre() {
+    if _is_running steamcmd; then
+        echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
+        return 1
+    fi
+
+    if _is_running ${command}; then
+        echo ${MESSAGE_STEAMCMD_SERVER_RUNNING}
+        return 2
+    fi
+
+    return 0
+}
+
+
+_run_post() {
+    echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
+
+    until healthy; do :; done
+    echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
+}

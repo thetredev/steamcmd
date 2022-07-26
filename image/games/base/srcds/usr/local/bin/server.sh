@@ -26,14 +26,10 @@ update() {
 
 
 run() {
-    if _is_running steamcmd; then
-        echo ${MESSAGE_STEAMCMD_UPDATE_RUNNING}
-        return 1
-    fi
+    pre_exit_code=$(_run_pre)
 
-    if _is_running srcds; then
-        echo ${MESSAGE_STEAMCMD_SERVER_RUNNING}
-        return 2
+    if ! $pre_exit_code; then
+        return $pre_exit_code
     fi
 
     steamcmd_cfg_dir=${STEAMCMD_SERVER_HOME}/${STEAMCMD_SERVER_GAME}/cfg
@@ -59,12 +55,7 @@ run() {
         -threads ${STEAMCMD_SERVER_THREADS} \
         -nodev" "Enter"
 
-    until healthy; do
-        sleep 5
-        echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
-    done
-
-    echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
+    _run_post
     return 0
 }
 
