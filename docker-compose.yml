@@ -185,7 +185,7 @@ services:
         - ${REGISTRY_IMAGE}:csgo
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
-        - STEAMCMD_SERVER_APPID=750
+        - STEAMCMD_SERVER_APPID=740
         - STEAMCMD_SERVER_GAME=csgo
         - STEAMCMD_SERVER_MAP=de_dust2
         - STEAMCMD_SERVER_MAXPLAYERS="-maxplayers_override 32"
