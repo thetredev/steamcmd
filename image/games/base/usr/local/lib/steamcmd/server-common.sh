@@ -27,6 +27,11 @@ MESSAGE_STEAMCMD_SERVER_HEALTHY="${MESSAGE_PREFIX} Server is healthy! ${MESSAGE_
 
 
 # Define common functions
+_is_attached() {
+    return $(${TMUX_CMD} ls -F "#{session_name}: #{?session_attached,yes,no}" | grep -w "${STEAMCMD_SERVER_SESSION_NAME}: yes" > /dev/null)
+}
+
+
 _is_running() {
     return $(ps cax | grep ${1} > /dev/null)
 }
@@ -47,7 +52,7 @@ wait() {
 }
 
 
-attach() {
+_attach() {
     ${TMUX_CMD} a -t ${STEAMCMD_SERVER_SESSION_NAME}
 }
 

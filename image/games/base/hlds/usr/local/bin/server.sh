@@ -23,6 +23,11 @@ _update_restart_needed() {
 }
 
 
+attach() {
+    _attach
+}
+
+
 update() {
     _update
 

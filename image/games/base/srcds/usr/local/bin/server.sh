@@ -20,6 +20,43 @@ EOF_TICKRATE_ENABLER_CFG
 }
 
 
+_setup_csgo_hibernation_hook_attached() {
+    ${TMUX_CMD} set-hook -t ${STEAMCMD_SERVER_SESSION_NAME} -u client-attached
+    ${TMUX_CMD} set-hook -t ${STEAMCMD_SERVER_SESSION_NAME} client-attached 'send-keys "sv_hibernate_when_empty 0" "Enter"'
+}
+
+
+_setup_csgo_hibernation_hook_detached() {
+    ${TMUX_CMD} set-hook -t ${STEAMCMD_SERVER_SESSION_NAME} -u client-detached
+    ${TMUX_CMD} set-hook -t ${STEAMCMD_SERVER_SESSION_NAME} client-detached 'send-keys "sv_hibernate_when_empty 1" "Enter"'
+}
+
+
+_setup_csgo_hibernation_hooks() {
+    if healthy; then
+        _setup_csgo_hibernation_hook_detached
+        _setup_csgo_hibernation_hook_attached
+    fi
+}
+
+
+_run_post_csgo() {
+    if _is_attached; then
+        _setup_csgo_hibernation_hook_detached
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_hibernate_when_empty 0" "Enter"
+    fi
+}
+
+
+attach() {
+    if [[ ${STEAMCMD_SERVER_GAME} == "csgo" ]]; then
+        _setup_csgo_hibernation_hooks
+    fi
+
+    _attach
+}
+
+
 update() {
     _update
 }
@@ -56,6 +93,11 @@ run() {
         -nodev" "Enter"
 
     _run_post
+
+    if [[ ${STEAMCMD_SERVER_GAME} == "csgo" ]]; then
+        _run_post_csgo
+    fi
+
     return 0
 }
 
