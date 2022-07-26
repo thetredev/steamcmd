@@ -38,7 +38,7 @@ healthy() {
 
 
 wait() {
-    until ! _is_running ${command}; do :; done
+    while _is_running ${command}; do :; done
 
     ${TMUX_CMD} kill-session -t ${STEAMCMD_SERVER_SESSION_NAME}
     ${TMUX_CMD} kill-server
