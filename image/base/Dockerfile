@@ -113,22 +113,6 @@ RUN curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz 
 USER root
 RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32/libstdc++.so.6 /usr/lib/libstdc++.so.6
 
-# Fix dockle/CIS-DI-0008
-RUN chmod a-s \
-        /usr/bin/chage \
-        /usr/bin/chfn \
-        /usr/bin/chsh \
-        /usr/bin/mount \
-        /usr/bin/umount \
-        /usr/bin/passwd \
-        /usr/bin/gpasswd \
-        /usr/bin/newgrp \
-        /usr/sbin/unix_chkpwd \
-        /usr/bin/su \
-        /usr/sbin/pam_timestamp_check \
-        /usr/libexec/utempter/utempter \
-        /usr/bin/write
-
 # Set default user to steamcmd
 USER steamcmd
 
