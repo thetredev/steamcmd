@@ -9,7 +9,7 @@ docker run --rm \
     -v ${git_root}/.trivyignore:/.trivyignore:ro \
     -v ~/.trivy-cache:/root/.cache \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    aquasec/trivy:0.30.2-amd64 image --severity ${2:-CRITICAL,HIGH,MEDIUM,LOW} ${docker_image}
+    aquasec/trivy:0.31.2-amd64 image --severity ${2:-CRITICAL,HIGH,MEDIUM,LOW} ${docker_image}
 
 docker run --rm \
     -v ${git_root}/.dockleignore:/.dockleignore:ro \
