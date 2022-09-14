@@ -43,6 +43,15 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         # required packages for SteamCMD
         ncurses-libs.i686 \
         SDL2.i686 \
+        # SSHD and editors for modifying server files externally
+        openssh-server \
+        vim \
+        nano \
+    && \
+        # Remve preinstalled SSHD configs but keep steamcmd.conf
+        mv /etc/ssh/sshd_config.d/steamcmd.conf /tmp/steamcmd.conf && \
+        rm -f /etc/ssh/sshd_config.d/* && \
+        mv /tmp/steamcmd.conf /etc/ssh/sshd_config.d/steamcmd.conf \
     && \
         # Update CA trust
         update-ca-trust \
@@ -86,7 +95,8 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
             /usr/bin/su \
             /usr/sbin/pam_timestamp_check \
             /usr/libexec/utempter/utempter \
-            /usr/bin/write
+            /usr/bin/write \
+            /usr/libexec/openssh/ssh-keysign
 
 # Switch to SteamCMD user
 USER steamcmd
