@@ -5,11 +5,13 @@ ARG TINI_VERSION=v0.19.0
 ARG GOSU_VERSION=1.14
 
 # Prepare image environment
-## SteamCMD
-ENV STEAMCMD_INSTALL_DIR=/home/steamcmd/package \
-    STEAMCMD_SERVER_HOME=/var/lib/steamcmd/server \
+## SteamCMD user
+ENV STEAMCMD_USER_HOME=/var/lib/steamcmd \
     STEAMCMD_UID=5000 \
     STEAMCMD_GID=5000
+## SteamCMD package & server
+ENV STEAMCMD_INSTALL_DIR="${STEAMCMD_USER_HOME}/package" \
+    STEAMCMD_SERVER_HOME="${STEAMCMD_USER_HOME}/server"
 ## System
 ENV TIME_ZONE=UTC \
     LANG=en_US.UTF-8 \
@@ -66,12 +68,9 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         chmod +x /usr/local/bin/gosu && \
         gosu nobody true \
     && \
-        # Prepare SteamCMD server directory
-        mkdir -p ${STEAMCMD_SERVER_HOME} \
-    && \
         # Create SteamCMD user
         groupadd -r -g "${STEAMCMD_GID}" steamcmd && \
-        useradd -ms /bin/bash -r -l -u "${STEAMCMD_UID}" -g "${STEAMCMD_GID}" steamcmd \
+        useradd -ms /bin/bash -d ${STEAMCMD_USER_HOME} -r -l -u "${STEAMCMD_UID}" -g "${STEAMCMD_GID}" steamcmd \
     && \
         # Fix dockle/CIS-DI-0008
         chmod a-s \
