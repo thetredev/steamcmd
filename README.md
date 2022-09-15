@@ -17,6 +17,10 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 - The server path is changed to `/var/lib/steamcmd/server`
 - `openssh-server` is installed to provide an easy and secure way of managing server files externally, even when using Kubernetes
 
+### SSH server
+
+See the SSHD configuration at `image/base/etc/ssh/sshd_config.d/steamcmd.conf` for the options applied to the server. Only public key authentication is enabled!
+
 To enable the SSH server, set the environment variables `STEAMCMD_SSH_SERVER_ENABLE` to `1` and `STEAMCMD_SSH_AUTHORIZED_KEYS` to the Base64 encoded public SSH keys separated by newlines (see `compose/hlds/cs-ssh.yml` or `compose/srcds/css-ssh.yml`). `STEAMCMD_SSH_AUTHORIZED_KEYS` essentially represents the `~/.ssh/authorized_keys` file on the server side in encoded format.
 
 To Base64-encode your public SSH keys, put all in one file and encode it:
@@ -29,6 +33,8 @@ cat ids.txt | base64 -w 0
 ```
 
 Then use the output as the value for `STEAMCMD_SSH_AUTHORIZED_KEYS`.
+
+See the Kubernetes example deployment at `deploy/srcds/css.yaml`. The service exposes port `2204` as SSH port which can be used to connect via CLI or SFTP (WinSCP) to modify server files. That's not the only way it can be done. With my example, you have to configure your firewall to now allow SSH from the outside directly for more security.
 
 ### HLDS image
 - Based on the `base` image

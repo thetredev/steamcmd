@@ -1,0 +1,113 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: steamcmd-css
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: steamcmd-css-pvc-game
+  namespace: steamcmd-css
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 15Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: steamcmd-css-pvc-ssh
+  namespace: steamcmd-css
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Mi
+---
+apiVersion: v1
+data:
+  authorized_keys: <base 64 encoded authorized_keys file contents>
+kind: Secret
+metadata:
+  name: ssh
+  namespace: steamcmd-css
+type: Opaque
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: steamcmd-css-pod
+  namespace: steamcmd-css
+  labels:
+    com.github.thetredev.steamcmd.service: steamcmd-css-service
+spec:
+  containers:
+    - name: steamcmd-css
+      image: ghcr.io/thetredev/steamcmd:css-latest
+      resources:
+        requests:
+          memory: "512Mi"
+          cpu: "100m"
+        limits:
+          memory: "1024Mi"
+          cpu: "200m"
+      env:
+        - name: TIME_ZONE
+          value: "Europe/Berlin"
+        - name: STEAMCMD_UID
+          value: "1000"
+        - name: STEAMCMD_GID
+          value: "5000"
+        - name: STEAMCMD_SSH_SERVER_ENABLE
+          value: "1"
+        - name: STEAMCMD_SSH_AUTHORIZED_KEYS
+          valueFrom:
+            secretKeyRef:
+              name: ssh
+              key: authorized_keys
+      ports:
+        - containerPort: 27015
+          protocol: UDP
+        - containerPort: 22
+          protocol: TCP
+      volumeMounts:
+        - name: data
+          mountPath: /var/lib/steamcmd/server
+        - name: ssh
+          mountPath: /opt/ssh
+  restartPolicy: Always
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: steamcmd-css-pvc-game
+    - name: ssh
+      persistentVolumeClaim:
+        claimName: steamcmd-css-pvc-ssh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: steamcmd-css-service
+  namespace: steamcmd-css
+spec:
+  type: LoadBalancer
+  loadBalancerIP: <your IP address>
+  ports:
+    # game server port
+    - name: game
+      protocol: UDP
+      port: 27015
+      targetPort: 27015
+    # SSH port
+    - name: ssh
+      protocol: TCP
+      port: 2204
+      targetPort: 22
+  selector:
+    com.github.thetredev.steamcmd.service: steamcmd-css-service
