@@ -1,0 +1,45 @@
+version: '3.7'
+
+networks:
+  srcds:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: 0
+
+services:
+  css:
+    image: ghcr.io/thetredev/steamcmd:css-latest
+    container_name: css
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      TIME_ZONE: Europe/Berlin
+      STEAMCMD_UID: 1000
+      STEAMCMD_GID: 5000
+      STEAMCMD_SSH_SERVER_ENABLE: 1
+      STEAMCMD_SSH_AUTHORIZED_KEYS: "<your SSH public keys separated by newline and base64 encoded>"
+    ports:
+      # SSH port
+      - "2244:22/tcp"
+      # SRCDS port
+      - "27015:27015/udp"
+      # enable the TCP one for RCON
+      #- "27015:27015/tcp"
+    volumes:
+      # SSH host keys
+      - ./css-ssh:/opt/ssh
+      # game server files
+      - ./css:/var/lib/steamcmd/server
+      # shared tmux socket directory:
+      #- /tmp/steamcmd:/tmp/steamcmd
+    networks:
+      - srcds
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048
