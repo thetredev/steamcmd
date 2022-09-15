@@ -15,6 +15,20 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 - The SteamCMD runtime error `[S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.` is fixed
 - It does not operate under the `root` user - a `steamcmd` user with default UID and GID of 5000 each is used instead
 - The server path is changed to `/var/lib/steamcmd/server`
+- `openssh-server` is installed to provide an easy and secure way of managing server files externally, even when using Kubernetes
+
+To enable the SSH server, set the environment variables `STEAMCMD_SSH_SERVER_ENABLE` to `1` and `STEAMCMD_SSH_AUTHORIZED_KEYS` to the Base64 encoded public SSH keys separated by newlines (see `compose/hlds/cs-ssh.yml` or `compose/srcds/css-ssh.yml`). `STEAMCMD_SSH_AUTHORIZED_KEYS` essentially represents the `~/.ssh/authorized_keys` file on the server side in encoded format.
+
+To Base64-encode your public SSH keys, put all in one file and encode it:
+```shell
+cat <ssh-key1>.pub >> ids.txt
+cat <ssh-key2>.pub >> ids.txt
+cat <ssh-key3>.pub >> ids.txt
+...
+cat ids.txt | base64 -w 0
+```
+
+Then use the output as the value for `STEAMCMD_SSH_AUTHORIZED_KEYS`.
 
 ### HLDS image
 - Based on the `base` image
