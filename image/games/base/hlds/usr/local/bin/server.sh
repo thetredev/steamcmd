@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
+if [[ $(id -u) -ne ${STEAMCMD_UID} ]]; then
     exec gosu steamcmd ${0} $@
 fi
 

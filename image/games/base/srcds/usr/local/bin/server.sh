@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $(id -u) -ne ${STEAMCMD_UID} ]; then
+if [[ $(id -u) -ne ${STEAMCMD_UID} ]]; then
     exec gosu steamcmd ${0} $@
 fi
 
@@ -72,7 +72,7 @@ run() {
     steamcmd_cfg_dir=${STEAMCMD_SERVER_HOME}/${STEAMCMD_SERVER_GAME}/cfg
 
     # Copy server.cfg file to the server cfg folder if it doesn't exist yet
-    if [ ! -f ${steamcmd_cfg_dir}/server.cfg ]; then
+    if [[ ! -f ${steamcmd_cfg_dir}/server.cfg ]]; then
         cp /etc/steamcmd/srcds/cfg/server.cfg ${steamcmd_cfg_dir}/server.cfg
     fi
 
