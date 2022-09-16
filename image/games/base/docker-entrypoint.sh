@@ -64,6 +64,9 @@ if [ $(id -u) -eq 0 ]; then
         prepare_ssh_host_key "ecdsa"
         prepare_ssh_host_key "ed25519"
 
+        # Add container environment as system environment variables to make them available in SSH sessions
+        env | grep STEAMCMD_ > /etc/environment
+
         # Run the server
         /usr/sbin/sshd
     fi
