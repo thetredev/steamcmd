@@ -43,6 +43,9 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         # required packages for SteamCMD
         ncurses-libs.i686 \
         SDL2.i686 \
+        # required for some server addons
+        zlib \
+        zlib.i686 \
         # SSHD and editors/tools for modifying server files externally
         openssh-server \
         vim \
