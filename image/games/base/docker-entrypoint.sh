@@ -33,9 +33,10 @@ if [ $(id -u) -eq 0 ]; then
     mkdir -p /tmp/dumps
     chown -R steamcmd:steamcmd /tmp/dumps
 
-    # Change ownership of steamcmd server folder to new steamcmd GID and UID
-    echo "Fixing ownership of ${STEAMCMD_SERVER_HOME}"
-    chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_HOME}
+    # Change ownership of steamcmd user folder to new steamcmd GID and UID
+    echo "Fixing ownership of ${STEAMCMD_USER_HOME}"
+    cp -rT /etc/skel ${STEAMCMD_USER_HOME}
+    chown -R steamcmd:steamcmd ${STEAMCMD_USER_HOME}
 
     # Change ownership of tmux session folder to new steamcmd GID and UID
     tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
