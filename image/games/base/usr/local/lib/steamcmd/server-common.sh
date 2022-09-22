@@ -72,6 +72,11 @@ _update() {
         +app_update ${STEAMCMD_SERVER_APPID} validate \
         +quit; ${TMUX_CMD} wait-for -S steamcmd-update-finished" "Enter"
 
+    # Fix SteamCMD runtime error
+    # [S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.
+    mkdir -p "${STEAMCMD_USER_HOME}/.steam"
+    ln -sf "${STEAMCMD_INSTALL_DIR}/linux32" "${STEAMCMD_USER_HOME}/.steam/sdk32"
+
     ${TMUX_CMD} wait-for steamcmd-update-finished
     echo ${MESSAGE_STEAMCMD_UPDATE_FINISHED}
 
