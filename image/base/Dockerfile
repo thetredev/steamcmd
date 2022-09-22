@@ -43,10 +43,11 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         # required packages for SteamCMD
         ncurses-libs.i686 \
         SDL2.i686 \
-        # SSHD and editors for modifying server files externally
+        # SSHD and editors/tools for modifying server files externally
         openssh-server \
         vim \
         nano \
+        bash-completion \
     && \
         # Remve preinstalled SSHD configs but keep steamcmd.conf
         mv /etc/ssh/sshd_config.d/steamcmd.conf /tmp/steamcmd.conf && \
