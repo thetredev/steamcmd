@@ -44,6 +44,8 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         ncurses-libs.i686 \
         SDL2.i686 \
         # required for some server addons
+        libffi \
+        libffi.i686 \
         zlib \
         zlib.i686 \
         # SSHD and editors/tools for modifying server files externally
@@ -67,7 +69,9 @@ RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
         ln -sf /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.5 && \
         ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
         ln -sf /usr/lib/libtinfo.so.6 /usr/lib/libtinfo.so.5 && \
-        rm -rf /tmp/* \
+        # Link libffi.so.8 to libffi.so.6
+        ln -sf /usr/lib/libffi.so.8 /usr/lib/libffi.so.6 && \
+        ln -sf /usr/lib64/libffi.so.8 /usr/lib64/libffi.so.6 \
     && \
         # Disable root login
         chsh -s /usr/sbin/nologin root \
