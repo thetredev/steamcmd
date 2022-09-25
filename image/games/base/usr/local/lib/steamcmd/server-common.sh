@@ -100,8 +100,18 @@ _run_pre() {
 
 
 _run_post() {
-    echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
+    _logs_fifo
 
+    echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
     until healthy; do :; done
     echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
+}
+
+
+_logs_fifo() {
+    rm -f ${STEAMCMD_SERVER_SESSION_FIFO}
+    mkfifo ${STEAMCMD_SERVER_SESSION_FIFO}
+
+    ${TMUX_CMD} pipe-pane -O -t ${STEAMCMD_SERVER_SESSION_NAME} 'cat > ${STEAMCMD_SERVER_SESSION_FIFO}'
+    while :; do cat ${STEAMCMD_SERVER_SESSION_FIFO}; done &
 }
