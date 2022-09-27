@@ -25,8 +25,7 @@ COPY . /
 # Configure system
 WORKDIR /tmp
 
-RUN sed -i '/\[main\]/a install_weak_deps=False' /etc/dnf/dnf.conf && \
-    yum-docker quick-install \
+RUN yum-docker quick-install \
         # basic system packages
         glibc-langpack-en \
         util-linux-user \

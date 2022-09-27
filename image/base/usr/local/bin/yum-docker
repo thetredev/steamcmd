@@ -1,7 +1,11 @@
 #!/bin/bash
 
 install() {
-    microdnf -y install ${@}
+    microdnf \
+        --nodocs \
+        --setopt=install_weak_deps=0 \
+        -y \
+        install ${@}
 }
 
 remove() {
