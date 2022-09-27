@@ -3,17 +3,6 @@
 # Set original entrypoint
 set -- tini -- start.sh ${@}
 
-# Helper function to fix host keys should they not exist
-_prepare_ssh_host_key() {
-    host_key_type="${1}"
-    host_key_path="/opt/ssh/ssh_host_${host_key_type}_key"
-
-    if [[ ! -f ${host_key_path} ]]; then
-        rm -f "${host_key_path}*"
-        ssh-keygen -q -N "" -t ${host_key_type} -f ${host_key_path}
-    fi
-}
-
 # Helper function to set time zone
 _prepare_time_zone() {
     echo "Setting time zone to: ${TIME_ZONE}"
@@ -50,6 +39,17 @@ _fix_tmux_session_dir_ownership() {
     echo "Fixing ownership of ${tmux_socket_dir}"
     mkdir -p ${tmux_socket_dir}
     chown -R steamcmd:steamcmd ${tmux_socket_dir}
+}
+
+# Helper function to fix host keys should they not exist
+_prepare_ssh_host_key() {
+    local host_key_type="${1}"
+    local host_key_path="/opt/ssh/ssh_host_${host_key_type}_key"
+
+    if [[ ! -f ${host_key_path} ]]; then
+        rm -f "${host_key_path}*"
+        ssh-keygen -q -N "" -t ${host_key_type} -f ${host_key_path}
+    fi
 }
 
 # Helper function to prepare the SSH server
