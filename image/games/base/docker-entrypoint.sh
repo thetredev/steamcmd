@@ -14,12 +14,15 @@ _prepare_ssh_host_key() {
     fi
 }
 
-# Fix file and directory permissions if run as root
-if [ $(id -u) -eq 0 ]; then
-
-    # Configure time zone for runtime
+# Helper function to set time zone
+_prepare_time_zone() {
     echo "Setting time zone to: ${TIME_ZONE}"
     ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
+}
+
+# Fix file and directory permissions if run as root
+if [ $(id -u) -eq 0 ]; then
+    _prepare_time_zone
 
     # Set steamcmd user GID and UID
     echo "Setting steamcmd user GID to ${STEAMCMD_GID}"
