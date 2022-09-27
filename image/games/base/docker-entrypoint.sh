@@ -34,7 +34,7 @@ _fix_steamcmd_dumps_ownership() {
 
 # Helper function to fix tmux session dir ownership
 _fix_tmux_session_dir_ownership() {
-    tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
+    local tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
 
     echo "Fixing ownership of ${tmux_socket_dir}"
     mkdir -p ${tmux_socket_dir}
@@ -54,7 +54,7 @@ _prepare_ssh_host_key() {
 
 # Helper function to prepare the SSH server
 _prepare_ssh_server() {
-    _ssh_keys="${STEAMCMD_SSH_AUTHORIZED_KEYS}"
+    local _ssh_keys="${STEAMCMD_SSH_AUTHORIZED_KEYS}"
 
     if [[ ${_ssh_keys} != ssh-* ]]; then
         _ssh_keys=$(echo -n "${STEAMCMD_SSH_AUTHORIZED_KEYS}" | base64 -d 2>&1) > /dev/null
