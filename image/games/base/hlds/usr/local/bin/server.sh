@@ -46,7 +46,6 @@ run() {
     fi
 
     echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
-    hlds_game=$(_get_hlds_game)
 
     ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "cd ${STEAMCMD_SERVER_HOME}; bash ./hlds_run \
         -console \
