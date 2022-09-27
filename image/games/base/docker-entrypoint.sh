@@ -45,31 +45,35 @@ if [ $(id -u) -eq 0 ]; then
     chown -R steamcmd:steamcmd ${tmux_socket_dir}
 
     if [[ "${STEAMCMD_SSH_SERVER_ENABLE}" == "1" ]]; then
-        # Prepare SSH server
-        echo "Preparing SSH server..."
-        mkdir -p "${STEAMCMD_USER_HOME}/.ssh"
+        _ssh_keys="${STEAMCMD_SSH_AUTHORIZED_KEYS}"
 
-        echo -n "${STEAMCMD_SSH_AUTHORIZED_KEYS}" | base64 -d > "${STEAMCMD_USER_HOME}/.ssh/authorized_keys"
-
-        if [ $? -ne 0 ]; then
-            echo "${STEAMCMD_SSH_AUTHORIZED_KEYS}" > "${STEAMCMD_USER_HOME}/.ssh/authorized_keys"
+        if [[ ${_ssh_keys} != ssh-* ]]; then
+            _ssh_keys=$(echo -n "${STEAMCMD_SSH_AUTHORIZED_KEYS}" | base64 -d 2>&1) > /dev/null
         fi
 
-        chown -R steamcmd:steamcmd "${STEAMCMD_USER_HOME}/.ssh"
-        chmod 0700 "${STEAMCMD_USER_HOME}/.ssh"
-        chmod 0600 "${STEAMCMD_USER_HOME}/.ssh/authorized_keys"
+        if [[ ${_ssh_keys} == ssh-* ]]; then
+            echo "Preparing SSH server..."
+            mkdir -p "${STEAMCMD_USER_HOME}/.ssh"
+            echo ${_ssh_keys} > "${STEAMCMD_USER_HOME}/.ssh/authorized_keys"
 
-        mkdir -p /opt/ssh
-        prepare_ssh_host_key "dsa"
-        prepare_ssh_host_key "rsa"
-        prepare_ssh_host_key "ecdsa"
-        prepare_ssh_host_key "ed25519"
+            chown -R steamcmd:steamcmd "${STEAMCMD_USER_HOME}/.ssh"
+            chmod 0700 "${STEAMCMD_USER_HOME}/.ssh"
+            chmod 0600 "${STEAMCMD_USER_HOME}/.ssh/authorized_keys"
 
-        # Add container environment as system environment variables to make them available in SSH sessions
-        env | grep STEAMCMD_ > /etc/environment
+            mkdir -p /opt/ssh
+            prepare_ssh_host_key "dsa"
+            prepare_ssh_host_key "rsa"
+            prepare_ssh_host_key "ecdsa"
+            prepare_ssh_host_key "ed25519"
 
-        # Run the server
-        /usr/sbin/sshd
+            # Add container environment as system environment variables to make them available in SSH sessions
+            env | grep STEAMCMD_ > /etc/environment
+
+            # Run the server
+            /usr/sbin/sshd
+        else
+            echo "Couldn't parse SSH authorized keys configuration, ignoring..."
+        fi
     fi
 
     # Call to gosu to drop from root user to steamcmd user
