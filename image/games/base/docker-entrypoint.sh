@@ -43,17 +43,21 @@ _fix_steamcmd_dumps_ownership() {
     chown -R steamcmd:steamcmd /tmp/dumps
 }
 
+# Helper function to fix tmux session dir ownership
+_fix_tmux_session_dir_ownership() {
+    tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
+
+    echo "Fixing ownership of ${tmux_socket_dir}"
+    mkdir -p ${tmux_socket_dir}
+    chown -R steamcmd:steamcmd ${tmux_socket_dir}
+}
+
 # Fix file and directory permissions if run as root
 if [ $(id -u) -eq 0 ]; then
     _prepare_time_zone
     _prepare_steamcmd_user
     _fix_steamcmd_dumps_ownership
-
-    # Change ownership of tmux session folder to new steamcmd GID and UID
-    tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
-    echo "Fixing ownership of ${tmux_socket_dir}"
-    mkdir -p ${tmux_socket_dir}
-    chown -R steamcmd:steamcmd ${tmux_socket_dir}
+    _fix_tmux_session_dir_ownership
 
     if [[ "${STEAMCMD_SSH_SERVER_ENABLE}" == "1" ]]; then
         _ssh_keys="${STEAMCMD_SSH_AUTHORIZED_KEYS}"
