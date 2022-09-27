@@ -216,7 +216,7 @@ services:
         - ${REGISTRY_IMAGE}:l4d
       args:
         - REGISTRY_BASE_IMAGE=${REGISTRY_IMAGE}:srcds
-        - STEAMCMD_SERVER_APPID=222840
+        - STEAMCMD_SERVER_APPID=510
         - STEAMCMD_SERVER_GAME=left4dead
         - STEAMCMD_SERVER_MAP=l4d_hospital01_apartment
         - STEAMCMD_SERVER_SESSION_NAME=left4dead
