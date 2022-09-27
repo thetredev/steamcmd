@@ -20,26 +20,31 @@ _prepare_time_zone() {
     ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
 }
 
-# Fix file and directory permissions if run as root
-if [ $(id -u) -eq 0 ]; then
-    _prepare_time_zone
-
-    # Set steamcmd user GID and UID
+# Helper function to prepare the steamcmd user
+_prepare_steamcmd_user() {
+    # Fix group ID
     echo "Setting steamcmd user GID to ${STEAMCMD_GID}"
     groupmod -g ${STEAMCMD_GID} steamcmd
 
+    # Fix user ID
     echo "Setting steamcmd user UID to ${STEAMCMD_UID}"
     usermod -u ${STEAMCMD_UID} steamcmd
+
+    # Fix ownership of user home directory
+    echo "Fixing ownership of ${STEAMCMD_USER_HOME}"
+    cp -rT /etc/skel ${STEAMCMD_USER_HOME}
+    chown -R steamcmd:steamcmd ${STEAMCMD_USER_HOME}
+}
+
+# Fix file and directory permissions if run as root
+if [ $(id -u) -eq 0 ]; then
+    _prepare_time_zone
+    _prepare_steamcmd_user
 
     # Change ownership of steamcmd dumps folder to new steamcmd GID and UID
     echo "Fixing ownership of /tmp/dumps"
     mkdir -p /tmp/dumps
     chown -R steamcmd:steamcmd /tmp/dumps
-
-    # Change ownership of steamcmd user folder to new steamcmd GID and UID
-    echo "Fixing ownership of ${STEAMCMD_USER_HOME}"
-    cp -rT /etc/skel ${STEAMCMD_USER_HOME}
-    chown -R steamcmd:steamcmd ${STEAMCMD_USER_HOME}
 
     # Change ownership of tmux session folder to new steamcmd GID and UID
     tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
