@@ -4,7 +4,7 @@
 set -- tini -- start.sh ${@}
 
 # Helper function to fix host keys should they not exist
-prepare_ssh_host_key() {
+_prepare_ssh_host_key() {
     host_key_type="${1}"
     host_key_path="/opt/ssh/ssh_host_${host_key_type}_key"
 
@@ -61,10 +61,10 @@ if [ $(id -u) -eq 0 ]; then
             chmod 0600 "${STEAMCMD_USER_HOME}/.ssh/authorized_keys"
 
             mkdir -p /opt/ssh
-            prepare_ssh_host_key "dsa"
-            prepare_ssh_host_key "rsa"
-            prepare_ssh_host_key "ecdsa"
-            prepare_ssh_host_key "ed25519"
+            _prepare_ssh_host_key "dsa"
+            _prepare_ssh_host_key "rsa"
+            _prepare_ssh_host_key "ecdsa"
+            _prepare_ssh_host_key "ed25519"
 
             # Add container environment as system environment variables to make them available in SSH sessions
             env | grep STEAMCMD_ > /etc/environment
