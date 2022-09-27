@@ -22,6 +22,7 @@ services:
       # enable the TCP one for RCON
       #- "27015:27015/tcp"
     volumes:
+      # game server files
       - ./dmc:/var/lib/steamcmd/server
       # shared tmux socket directory:
       #- /tmp/steamcmd:/tmp/steamcmd
