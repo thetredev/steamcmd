@@ -36,15 +36,18 @@ _prepare_steamcmd_user() {
     chown -R steamcmd:steamcmd ${STEAMCMD_USER_HOME}
 }
 
+# Helper function to fix steamcmd dumps ownership
+_fix_steamcmd_dumps_ownership() {
+    echo "Fixing ownership of /tmp/dumps"
+    mkdir -p /tmp/dumps
+    chown -R steamcmd:steamcmd /tmp/dumps
+}
+
 # Fix file and directory permissions if run as root
 if [ $(id -u) -eq 0 ]; then
     _prepare_time_zone
     _prepare_steamcmd_user
-
-    # Change ownership of steamcmd dumps folder to new steamcmd GID and UID
-    echo "Fixing ownership of /tmp/dumps"
-    mkdir -p /tmp/dumps
-    chown -R steamcmd:steamcmd /tmp/dumps
+    _fix_steamcmd_dumps_ownership
 
     # Change ownership of tmux session folder to new steamcmd GID and UID
     tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
