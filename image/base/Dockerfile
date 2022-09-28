@@ -1,4 +1,4 @@
-FROM almalinux:9.0-minimal-20220901
+ABCDEFGGGGGG
 
 # Build arguments
 ARG TINI_VERSION=v0.19.0
