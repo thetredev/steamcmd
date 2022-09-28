@@ -1,0 +1,124 @@
+name: Check for newer base image every night
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  compare-base-image-tag:
+    permissions: write-all
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Compare base image tag
+        id: compare
+        run: |
+          # Get current base image
+          current_base_image=$(sed -rn '/FROM /p' image/base/Dockerfile | cut -d ' ' -f 2)
+
+          # Get current base image repository
+          current_repository=$(echo ${current_base_image} | cut -d ':' -f 1)
+
+          # Get current base image prefix
+          current_prefix=$(echo ${current_base_image} | cut -d ':' -f 2)
+
+          # Get current base image tag prefix
+          current_tag_prefix=$(echo ${current_prefix} | cut -d '-' -f-1,2)
+
+          # Get current base image tag date
+          current_tag_date=$(echo ${current_prefix} | cut -d '-' -f 3)
+
+          # Get a date object from the current tag date
+          current_tag_date_object=$(date -d "${current_tag_date}" +%s)
+
+          # Use crane to list all available remote tags based on the base image tag prefix
+          # https://github.com/google/go-containerregistry/tree/main/cmd/crane
+          remote_tag_dates=$(docker run --rm gcr.io/go-containerregistry/crane:v0.11.0 ls docker.io/library/${current_repository} | grep "^${current_tag_prefix}-[0-9]" | cut -d '-' -f 3)
+
+          # Compare each remote tag date to the current one and print the results
+          echo "Checking for newer base image than ${current_base_image} ..."
+          newer_tag="${current_tag_date}"
+
+          for tag_date in ${remote_tag_dates}; do
+            remote_tag_date=$(date -d "${tag_date}" +%s)
+
+            if [[ ${remote_tag_date} > ${current_tag_date_object} ]]; then
+              newer_tag="${tag_date}"
+              break
+            fi
+          done
+
+          if [[ "${newer_tag}" == "${current_tag_date}" ]]; then
+            echo "No newer tag found."
+            echo ::set-output name=createpr::0
+          else
+            echo "CI_PR_NEW_BASE_IMAGE=${current_repository}:${current_tag_prefix}-${newer_tag}" >> $GITHUB_ENV
+            echo ::set-output name=createpr::1
+          fi
+
+      - name: Check if pull request exists for newer base image
+        if: ${{ steps.compare.outputs.createpr == 1 }}
+        id: checkpr
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const result = await github.rest.pulls.list({
+              owner,
+              repo,
+              head: 'actions/bump-base-image',
+              base: 'main',
+              state: 'open'
+            });
+
+            if (result.length > 0)
+            {
+              return 'skip'
+            }
+
+            return 'continue'
+          result-encoding: string
+
+      - name: Push new branch with updated base image
+        if: ${{ steps.checkpr.outputs.result == 'continue' }}
+        run: |
+          # Prepare git user
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          # Checkout new branch from main
+          git fetch origin main
+          git checkout main
+          git checkout -b actions/bump-base-image
+
+          # Get current base image
+          current_base_image=$(sed -rn '/FROM /p' image/base/Dockerfile)
+
+          # Replace base image
+          sed -i "s/${current_base_image}/FROM ${CI_PR_NEW_BASE_IMAGE}/g" image/base/Dockerfile
+
+          # Add, commit and push changes to the branch
+          git add image/base/Dockerfile
+          git commit -m "Bump base image to ${CI_PR_NEW_BASE_IMAGE}"
+          git push origin actions/bump-base-image -f
+
+      - name: Create pull request for newer base image
+        if: ${{ steps.checkpr.outputs.result == 'continue' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const result = await github.rest.pulls.create({
+              title: `[Bump] Base image tag to ${process.env.CI_PR_NEW_BASE_IMAGE}`,
+              owner,
+              repo,
+              head: 'actions/bump-base-image',
+              base: 'main'
+            });
+            github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: result.data.number,
+              labels: ['improvement', 'bump base image']
+            });
