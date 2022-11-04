@@ -29,4 +29,9 @@ quick-install() {
     clean
 }
 
+quick-update() {
+    update ${@}
+    clean
+}
+
 ${@}
