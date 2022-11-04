@@ -9,9 +9,9 @@ docker run --rm \
     -v ${git_root}/.trivyignore:/.trivyignore:ro \
     -v ~/.trivy-cache:/root/.cache \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    aquasec/trivy:0.31.2-amd64 image --severity ${2:-CRITICAL,HIGH,MEDIUM,LOW} ${docker_image}
+    aquasec/trivy:0.34.0-amd64 image --severity ${2:-CRITICAL,HIGH,MEDIUM,LOW} ${docker_image}
 
 docker run --rm \
     -v ${git_root}/.dockleignore:/.dockleignore:ro \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    goodwithtech/dockle:v0.4.6-amd64 ${docker_image}
+    goodwithtech/dockle:v0.4.9-amd64 ${docker_image}
