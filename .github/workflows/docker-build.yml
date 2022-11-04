@@ -32,7 +32,7 @@ jobs:
           done
 
       - name: Trivy CVE scan - base
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:base"
           format: 'table'
@@ -47,7 +47,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - hlds
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:hlds"
           format: 'table'
@@ -62,7 +62,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - srcds
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:srcds"
           format: 'table'
@@ -77,7 +77,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/hlmp
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:hlmp"
           format: 'table'
@@ -92,7 +92,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/cs
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:cs"
           format: 'table'
@@ -107,7 +107,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/czero
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:czero"
           format: 'table'
@@ -122,7 +122,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/dod
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:dod"
           format: 'table'
@@ -137,7 +137,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/dmc
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:dmc"
           format: 'table'
@@ -152,7 +152,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/op4
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:op4"
           format: 'table'
@@ -167,7 +167,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/hlds/tfc
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:tfc"
           format: 'table'
@@ -182,7 +182,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/bms
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:bms"
           format: 'table'
@@ -197,7 +197,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/css
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:css"
           format: 'table'
@@ -212,7 +212,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/csgo
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:csgo"
           format: 'table'
@@ -227,7 +227,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/dods
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:dods"
           format: 'table'
@@ -242,7 +242,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/gm
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:gm"
           format: 'table'
@@ -257,7 +257,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/hl2mp
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:hl2mp"
           format: 'table'
@@ -272,7 +272,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/l4d
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:l4d"
           format: 'table'
@@ -287,7 +287,7 @@ jobs:
           dockle-version: '0.4.5'
 
       - name: Trivy CVE scan - games/srcds/l4d2
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.8.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:l4d2"
           format: 'table'
