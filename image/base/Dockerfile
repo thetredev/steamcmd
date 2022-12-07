@@ -53,10 +53,6 @@ RUN yum-docker quick-install \
         nano \
         bash-completion \
     && \
-        # selective package updates to mitigate CVEs
-        yum-docker quick-update \
-            lua-libs \
-    && \
         # Remve preinstalled SSHD configs but keep steamcmd.conf
         mv /etc/ssh/sshd_config.d/steamcmd.conf /tmp/steamcmd.conf && \
         rm -f /etc/ssh/sshd_config.d/* && \
