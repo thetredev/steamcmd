@@ -51,10 +51,10 @@ jobs:
 
           if [[ "${newer_tag}" == "${current_tag_date}" ]]; then
             echo "No newer tag found."
-            echo ::set-output name=createpr::0
+            echo "createpr=0" >> $GITHUB_OUTPUT
           else
             echo "CI_PR_NEW_BASE_IMAGE=${current_repository}:${current_tag_prefix}-${newer_tag}" >> $GITHUB_ENV
-            echo ::set-output name=createpr::1
+            echo "createpr=1" >> $GITHUB_OUTPUT
           fi
 
       - name: Check if pull request exists for newer base image
