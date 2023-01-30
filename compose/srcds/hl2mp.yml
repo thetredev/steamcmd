@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# SRCDS image: Half Life 2: Deathmatch
 services:
   hl2mp:
-    image: ghcr.io/thetredev/steamcmd:hl2mp-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: hl2mp
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APPID: 232370
+      STEAMCMD_SERVER_GAME: hl2mp
+      STEAMCMD_SERVER_MAP: dm_lockdown
+      STEAMCMD_SERVER_SESSION_NAME: hl2mp
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

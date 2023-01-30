@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# HLDS image: Deathmatch Classic
 services:
   dmc:
-    image: ghcr.io/thetredev/steamcmd:dmc-latest
+    image: ghcr.io/thetredev/steamcmd:hlds-latest
     container_name: dmc
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,9 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_GAME: dmc
+      STEAMCMD_SERVER_MAP: dmc_dm2
+      STEAMCMD_SERVER_SESSION_NAME: dmc
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

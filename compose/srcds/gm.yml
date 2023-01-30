@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# SRCDS image: Garray's Mod
 services:
   gm:
-    image: ghcr.io/thetredev/steamcmd:gm-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: gm
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APPID: 4020
+      STEAMCMD_SERVER_GAME: garrysmod
+      STEAMCMD_SERVER_MAP: gm_construct
+      STEAMCMD_SERVER_SESSION_NAME: garrysmod
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

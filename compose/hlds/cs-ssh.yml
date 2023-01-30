@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# HLDS image: Counter-Strike (SSH enabled)
 services:
   cs:
-    image: ghcr.io/thetredev/steamcmd:cs-latest
+    image: ghcr.io/thetredev/steamcmd:hlds-latest
     container_name: cs
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,9 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_GAME: cstrike
+      STEAMCMD_SERVER_MAP: de_dust2
+      STEAMCMD_SERVER_SESSION_NAME: cs
       STEAMCMD_SSH_SERVER_ENABLE: 1
       STEAMCMD_SSH_AUTHORIZED_KEYS: "<your SSH public keys separated by newline and base64 encoded>"
     ports:

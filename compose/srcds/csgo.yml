@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# SRCDS image: Counter-Strike: Global Offensive
 services:
   csgo:
-    image: ghcr.io/thetredev/steamcmd:csgo-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: csgo
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,11 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APPID: 740
+      STEAMCMD_SERVER_GAME: csgo
+      STEAMCMD_SERVER_MAP: de_dust2
+      STEAMCMD_SERVER_MAXPLAYERS: "-maxplayers_override 32"
+      STEAMCMD_SERVER_SESSION_NAME: csgo
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

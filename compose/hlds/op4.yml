@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# HLDS image: Half Life: Opposing Force
 services:
   op4:
-    image: ghcr.io/thetredev/steamcmd:op4-latest
+    image: ghcr.io/thetredev/steamcmd:hlds-latest
     container_name: op4
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APP_CONFIG: "+app_set_config 90 mod gearbox"
+      STEAMCMD_SERVER_GAME: gearbox
+      STEAMCMD_SERVER_MAP: op4_demise
+      STEAMCMD_SERVER_SESSION_NAME: op4
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

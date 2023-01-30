@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# HLDS image: Counter-Strike: Condition Zero
 services:
   czero:
-    image: ghcr.io/thetredev/steamcmd:czero-latest
+    image: ghcr.io/thetredev/steamcmd:hlds-latest
     container_name: czero
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APP_CONFIG: "+app_set_config 90 mod czero"
+      STEAMCMD_SERVER_GAME: czero
+      STEAMCMD_SERVER_MAP: de_dust2_cz
+      STEAMCMD_SERVER_SESSION_NAME: czero
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

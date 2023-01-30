@@ -11,7 +11,9 @@ ENV STEAMCMD_USER_HOME=/var/lib/steamcmd \
     STEAMCMD_GID=5000
 ## SteamCMD package & server
 ENV STEAMCMD_INSTALL_DIR="${STEAMCMD_USER_HOME}/package" \
-    STEAMCMD_SERVER_HOME="${STEAMCMD_USER_HOME}/server"
+    STEAMCMD_SERVER_HOME="${STEAMCMD_USER_HOME}/server" \
+    STEAMCMD_SERVER_SESSION_SOCKET="/tmp/steamcmd/session.sock" \
+    STEAMCMD_SERVER_SESSION_FIFO="/tmp/steamcmd/session.fifo"
 ## System
 ENV TIME_ZONE=UTC \
     LANG=en_US.UTF-8 \
@@ -119,12 +121,11 @@ RUN curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz 
     mkdir -p "${HOME}/.steam" && \
     steamcmd +quit > /dev/null 2>&1
 
-# Link SteamCMD libstdc++ library to system
+# Switch back to the root user
 USER root
-RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32/libstdc++.so.6 /usr/lib/libstdc++.so.6
 
-# Set default user to steamcmd
-USER steamcmd
+# Link SteamCMD libstdc++ library to system
+RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32/libstdc++.so.6 /usr/lib/libstdc++.so.6
 
 # Set default workdir to SteamCMD server dir
 WORKDIR ${STEAMCMD_SERVER_HOME}
@@ -132,6 +133,9 @@ WORKDIR ${STEAMCMD_SERVER_HOME}
 # Declare SteamCMD install directory as Docker volume to enable incremental updates
 VOLUME [ ${STEAMCMD_INSTALL_DIR} ]
 
-# Set SteamCMD executable as default entrypoint
-ENTRYPOINT [ "steamcmd" ]
-CMD [ "+help", "+quit" ]
+# Declare server health check
+HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \
+    CMD server.sh healthy
+
+# Set /docker/entrypoint.sh script as default entrypoint
+ENTRYPOINT [ "/usr/bin/docker-entrypoint.sh" ]

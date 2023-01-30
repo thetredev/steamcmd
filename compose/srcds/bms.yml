@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# SRCDS image: Black Mesa: Deathmatch
 services:
   bms:
-    image: ghcr.io/thetredev/steamcmd:bms-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: bms
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APPID: 346680
+      STEAMCMD_SERVER_GAME: bms
+      STEAMCMD_SERVER_MAP: dm_bounce
+      STEAMCMD_SERVER_SESSION_NAME: bms
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

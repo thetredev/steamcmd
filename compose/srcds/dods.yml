@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# SRCDS image: Day of Defeat: Source
 services:
   dods:
-    image: ghcr.io/thetredev/steamcmd:dods-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: dods
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APPID: 232290
+      STEAMCMD_SERVER_GAME: dod
+      STEAMCMD_SERVER_MAP: dod_palermo
+      STEAMCMD_SERVER_SESSION_NAME: dods
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

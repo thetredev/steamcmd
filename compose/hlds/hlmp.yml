@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# HLDS image: Half-Life
 services:
   hlmp:
-    image: ghcr.io/thetredev/steamcmd:hlmp-latest
+    image: ghcr.io/thetredev/steamcmd:hlds-latest
     container_name: hlmp
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,9 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_GAME: valve
+      STEAMCMD_SERVER_MAP: c1a1
+      STEAMCMD_SERVER_SESSION_NAME: hlmp
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

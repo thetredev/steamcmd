@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# HLDS image: Team Fortress Classic
 services:
   tfc:
-    image: ghcr.io/thetredev/steamcmd:tfc-latest
+    image: ghcr.io/thetredev/steamcmd:hlds-latest
     container_name: tfc
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APP_CONFIG: "+app_set_config 90 mod tfc"
+      STEAMCMD_SERVER_GAME: tfc
+      STEAMCMD_SERVER_MAP: 2fort
+      STEAMCMD_SERVER_SESSION_NAME: tfc
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON

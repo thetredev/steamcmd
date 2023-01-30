@@ -6,9 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
+# SRCDS image: Left 4 Dead 2
 services:
   l4d2:
-    image: ghcr.io/thetredev/steamcmd:l4d2-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: l4d2
     restart: unless-stopped
     stdin_open: true
@@ -17,6 +18,10 @@ services:
       TIME_ZONE: Europe/Berlin
       STEAMCMD_UID: 1000
       STEAMCMD_GID: 5000
+      STEAMCMD_SERVER_APPID: 222860
+      STEAMCMD_SERVER_GAME: left4dead2
+      STEAMCMD_SERVER_MAP: c2m1_highway
+      STEAMCMD_SERVER_SESSION_NAME: left4dead2
     ports:
       - "27015:27015/udp"
       # enable the TCP one for RCON
