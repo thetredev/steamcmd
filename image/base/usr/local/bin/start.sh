@@ -6,6 +6,10 @@ tmux -S ${STEAMCMD_SERVER_SESSION_SOCKET} new-session -d -s ${STEAMCMD_SERVER_SE
 chgrp steamcmd ${STEAMCMD_SERVER_SESSION_SOCKET}
 chmod g+rwx ${STEAMCMD_SERVER_SESSION_SOCKET}
 
+# Copy tmux config file to socket location
+echo "Copying tmux session config file to $(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})/tmux.conf"
+cp -f /etc/tmux.conf $(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})/tmux.conf
+
 # Update the server
 server.sh update
 
