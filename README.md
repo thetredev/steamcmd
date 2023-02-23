@@ -34,8 +34,6 @@ cat ids.txt | base64 -w 0
 
 Then use the output as the value for `STEAMCMD_SSH_AUTHORIZED_KEYS`.
 
-See the Kubernetes example deployment at `deploy/srcds/css.yaml`. The service exposes port `2204` as SSH port which can be used to connect via CLI or SFTP (WinSCP) to modify server files. That's not the only way it can be done. With my example, you have to configure your firewall to now allow SSH from the outside directly for more security.
-
 ### HLDS image
 - Based on the `base` image
 - Provides a generic base for HLDS-based game servers
@@ -92,6 +90,9 @@ Currently supported game server images:
 | Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:l4d2-latest` |
 
 See the `compose/srcds` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/srcds/multiple.yml`.
+
+## Kubernetes
+See https://github.com/thetredev/helm-charts.
 
 ## Image repositories
 The image repository is: `ghcr.io/thetredev/steamcmd`<br/>
