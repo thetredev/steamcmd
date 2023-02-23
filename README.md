@@ -50,13 +50,13 @@ Currently supported game server images:
 
 | Game | Docker Image |
 | ---- | ---- |
-| Half-Life | `ghcr.io/thetredev/steamcmd:hlmp-latest` |
-| Half-Life: Opposing Force | `ghcr.io/thetredev/steamcmd:op4-latest` |
-| Counter-Strike | `ghcr.io/thetredev/steamcmd:cs-latest` |
-| Counter-Strike: Condition Zero | `ghcr.io/thetredev/steamcmd:czero-latest` |
-| Day of Defeat | `ghcr.io/thetredev/steamcmd:dod-latest` |
-| Deathmatch Classic | `ghcr.io/thetredev/steamcmd:dmc-latest` |
-| Team Fortress Classic | `ghcr.io/thetredev/steamcmd:tfc-latest` |
+| Half-Life | `ghcr.io/thetredev/steamcmd:hlds-latest` |
+| Half-Life: Opposing Force | `ghcr.io/thetredev/steamcmd:hlds-latest` |
+| Counter-Strike | `ghcr.io/thetredev/steamcmd:hlds-latest` |
+| Counter-Strike: Condition Zero | `ghcr.io/thetredev/steamcmd:hlds-latest` |
+| Day of Defeat | `ghcr.io/thetredev/steamcmd:hlds-latest` |
+| Deathmatch Classic | `ghcr.io/thetredev/steamcmd:hlds-latest` |
+| Team Fortress Classic | `ghcr.io/thetredev/steamcmd:hlds-latest` |
 
 See the `compose/hlds` directory for more details.
 
@@ -80,14 +80,14 @@ Currently supported game server images:
 
 | Game | Docker Image |
 | ---- | ---- |
-| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:bms-latest` |
-| Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:css-latest` |
-| Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
-| Day of Defeat: Source | `ghcr.io/thetredev/steamcmd:dods-latest` |
-| Garry's Mod | `ghcr.io/thetredev/steamcmd:gm-latest` |
-| Half Life 2: Deathmatch | `ghcr.io/thetredev/steamcmd:hl2mp-latest` |
-| Left 4 Dead | `ghcr.io/thetredev/steamcmd:l4d-latest` |
-| Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:l4d2-latest` |
+| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Day of Defeat: Source | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Garry's Mod | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Half Life 2: Deathmatch | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Left 4 Dead | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 
 See the `compose/srcds` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/srcds/multiple.yml`.
 
@@ -102,7 +102,7 @@ The GitHub image repository is synchronized with the Docker Hub repository:<br/>
 https://hub.docker.com/r/thetredev/steamcmd
 
 The GitHub Actions workflows are setup in the following way:
-- Pushes to the `main` branch lead to the image tags `ghcr.io/thetredev/steamcmd:<image>-latest`, where `<image>` is one of the following: `base`, `srcds`, and any game servers a `Dockerfile` is provided for (see *the supported game server images* above)
+- Pushes to the `main` branch lead to the image tags `ghcr.io/thetredev/steamcmd:<image>-latest`, where `<image>` is one of the following: `base`, `hlds` or `srcds` (see *the supported game server images* above)
 - Pushes of tags lead to retagging the `ghcr.io/thetredev/steamcmd:<image>-latest` images to `ghcr.io/thetredev/steamcmd:<image>-<tag>`
 
 All image builds are scanned for CVEs and only pushed as `latest` or the given tag if no CVEs are found. The scans can be viewed publicly [from within the Actions tab](https://github.com/thetredev/steamcmd/actions) at job **build**.
