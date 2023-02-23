@@ -92,5 +92,8 @@ jobs:
 
           for docker_image_type in ${docker_image_types}; do
             docker tag ${REGISTRY_IMAGE}:${docker_image_type} ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+            docker tag ${REGISTRY_IMAGE}:${docker_image_type} ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+
             docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
           done
