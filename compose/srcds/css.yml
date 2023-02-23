@@ -9,8 +9,7 @@ networks:
 # SRCDS image: Counter-Strike: Source
 services:
   css:
-    image: thetredev-steamcmd:srcds
-    #image: ghcr.io/thetredev/steamcmd:srcds-latest
+    image: ghcr.io/thetredev/steamcmd:srcds-latest
     container_name: css
     restart: unless-stopped
     stdin_open: true
