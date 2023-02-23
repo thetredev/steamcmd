@@ -14,7 +14,7 @@ _prepare_tickrate_enabler() {
 sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}
 sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}
 sv_minrate ${STEAMCMD_SERVER_MINRATE}
-sv_maxrate ${STEAMCMD_SERVER_MAXRATE}
+sv_maxrate ${STEAMCMD_SERVER_MAXRATE:-0}
 fps_max ${STEAMCMD_SERVER_FPSMAX}
 EOF_TICKRATE_ENABLER_CFG
 }
