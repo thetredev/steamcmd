@@ -5,45 +5,10 @@ on:
     tags:
       - '**'
 
-env:
-  DOCKER_BUILDKIT: 1
-  REGISTRY_IMAGE: "${{ github.repository_owner }}/${{ github.event.repository.name }}"
-  GHCR_PREFIX: "ghcr.io"
-  DOCKER_HUB_PREFIX: "docker.io"
-  DOCKER_IMAGE_BASE_ORDER: "base srcds hlds"
-  DOCKER_RETAG_SH: ".github/scripts/docker_retag.sh"
-
 jobs:
-  retag:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS }}
-
-      - name: Push tagged images to registries
-        run: |
-          for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
-            docker pull ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest
-
-            docker tag ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
-            docker tag ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
-
-            docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
-            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
-          done
+  tag:
+    uses: thetredev/steamcmd/.github/workflows/build-scan-push-tag.yml@main
+    with:
+      push: false
+      tag: true
+    secrets: inherit
