@@ -3,7 +3,7 @@ FROM registry.gitlab.steamos.cloud/steamrt/sniper/platform:${STEAMRT_PLATFORM_VE
 
 # Build arguments
 ARG TINI_VERSION=v0.19.0
-ARG GOSU_VERSION=1.14
+ARG GOSU_VERSION=1.16
 
 # Prepare image environment
 ## SteamCMD user
