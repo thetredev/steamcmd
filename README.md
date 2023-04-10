@@ -11,7 +11,7 @@ This project aims to provide pre-packaged `SteamCMD` docker images which are up-
 While [the official images](https://github.com/steamcmd/docker) are fine, my take differs in a couple ways:
 
 ### Base image
-- Based on the official `Alma Linux 9.1` image with all necessary dependencies and basic tools preinstalled
+- Based on the official [`Steam Runtime 3 (Sniper)` image](https://gitlab.steamos.cloud/steamrt/sniper/platform) with all necessary dependencies and basic tools preinstalled
 - The SteamCMD runtime error `[S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.` is fixed
 - It does not operate under the `root` user - a `steamcmd` user with default UID and GID of 5000 each is used instead
 - The server path is changed to `/var/lib/steamcmd/server`

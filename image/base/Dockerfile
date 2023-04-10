@@ -1,4 +1,5 @@
-FROM almalinux:9.1-minimal-20230222
+ARG STEAMRT_PLATFORM_VERSION=0.20230405.47175
+FROM registry.gitlab.steamos.cloud/steamrt/sniper/platform:${STEAMRT_PLATFORM_VERSION}
 
 # Build arguments
 ARG TINI_VERSION=v0.19.0
@@ -19,7 +20,8 @@ ENV TIME_ZONE=UTC \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US \
     LC_ALL=C \
-    PATH=${PATH}:${STEAMCMD_INSTALL_DIR}
+    PATH=${PATH}:${STEAMCMD_INSTALL_DIR} \
+    DEBIAN_FRONTEND=noninteractive
 
 # Copy build context into image
 COPY . /
@@ -27,28 +29,15 @@ COPY . /
 # Configure system
 WORKDIR /tmp
 
-RUN yum-docker quick-install \
-        # basic system packages
-        glibc-langpack-en \
-        util-linux-user \
-        ncurses \
+RUN dpkg-reconfigure locales
+RUN apt-docker quick-install \
         # basic tools
         file \
         zip \
+        curl \
         unzip \
         tmux \
         procps \
-        tar \
-        passwd \
-        shadow-utils \
-        # required packages for SteamCMD
-        ncurses-libs.i686 \
-        SDL2.i686 \
-        # required for some server addons
-        libffi \
-        libffi.i686 \
-        zlib \
-        zlib.i686 \
         # SSHD and editors/tools for modifying server files externally
         openssh-server \
         vim \
@@ -60,19 +49,26 @@ RUN yum-docker quick-install \
         rm -f /etc/ssh/sshd_config.d/* && \
         mv /tmp/steamcmd.conf /etc/ssh/sshd_config.d/steamcmd.conf \
     && \
-        # Update CA trust
-        update-ca-trust \
+        # Update CA certificates
+        update-ca-certificates \
     && \
-        # Link ncurses and tinfo libs version 6 to 5
-        ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
-        ln -sf /usr/lib/libncurses++w.so.6 /usr/lib/libncurses++w.so.5 && \
-        ln -sf /usr/lib/libncurses.so.6 /usr/lib/libncurses.so.5 && \
-        ln -sf /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.5 && \
-        ln -sf /usr/lib/libncurses++.so.6 /usr/lib/libncurses++.so.5 && \
-        ln -sf /usr/lib/libtinfo.so.6 /usr/lib/libtinfo.so.5 && \
-        # Link libffi.so.8 to libffi.so.6
-        ln -sf /usr/lib/libffi.so.8 /usr/lib/libffi.so.6 && \
-        ln -sf /usr/lib64/libffi.so.8 /usr/lib64/libffi.so.6 \
+        # Link ncurses libs version 6 to 5
+        ## x86_64
+        ln -sf /lib/x86_64-linux-gnu/libncurses.so.6 /lib/x86_64-linux-gnu/libncurses.so.5 && \
+        ln -sf /lib/x86_64-linux-gnu/libncursesw.so.6 /lib/x86_64-linux-gnu/libncursesw.so.5 && \
+        ## i386
+        ln -sf /lib/i386-linux-gnu/libncurses.so.6 /lib/i386-linux-gnu/libncurses.so.5 && \
+        ln -sf /lib/i386-linux-gnu/libncursesw.so.6 /lib/i386-linux-gnu/libncursesw.so.5 && \
+        # Link tinfo libs version 6 to 5
+        ## x86_64
+        ln -sf /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.5 && \
+        ## i386
+        ln -sf /lib/i386-linux-gnu/libtinfo.so.6 /lib/i386-linux-gnu/libtinfo.so.5 && \
+        # Link ffi libs version 7 to 6
+        ## x86_64
+        ln -sf /usr/lib/x86_64-linux-gnu/libffi.so.7 /usr/lib/x86_64-linux-gnu/libffi.so.6 && \
+        ## i386
+        ln -sf /usr/lib/i386-linux-gnu/libffi.so.7 /usr/lib/i386-linux-gnu/libffi.so.6 \
     && \
         # Disable root login
         chsh -s /usr/sbin/nologin root \
@@ -95,17 +91,10 @@ RUN yum-docker quick-install \
             /usr/bin/chage \
             /usr/bin/chfn \
             /usr/bin/chsh \
-            /usr/bin/mount \
-            /usr/bin/umount \
             /usr/bin/passwd \
             /usr/bin/gpasswd \
             /usr/bin/newgrp \
-            /usr/sbin/unix_chkpwd \
-            /usr/bin/su \
-            /usr/sbin/pam_timestamp_check \
-            /usr/libexec/utempter/utempter \
-            /usr/bin/write \
-            /usr/libexec/openssh/ssh-keysign
+            /usr/sbin/pam_timestamp_check
 
 # Switch to SteamCMD user
 USER steamcmd
@@ -123,9 +112,6 @@ RUN curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz 
 
 # Switch back to the root user
 USER root
-
-# Link SteamCMD libstdc++ library to system
-RUN ln -sf ${STEAMCMD_INSTALL_DIR}/linux32/libstdc++.so.6 /usr/lib/libstdc++.so.6
 
 # Set default workdir to SteamCMD server dir
 WORKDIR ${STEAMCMD_SERVER_HOME}

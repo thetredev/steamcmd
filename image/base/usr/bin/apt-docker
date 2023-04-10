@@ -1,0 +1,47 @@
+#!/bin/bash
+
+_apt() {
+    apt-get \
+        --no-install-recommends \
+        -y \
+        ${@}
+}
+
+install() {
+    _apt install ${@}
+}
+
+update() {
+    _apt full-upgrade ${@}
+}
+
+remove() {
+    _apt purge ${@}
+    _apt autoremove --purge
+}
+
+clean() {
+    _apt autoclean
+    _apt clean
+    rm -rf /var/cache/apt/lists/*
+}
+
+quick-install() {
+    _apt update
+    install ${@}
+    clean
+}
+
+quick-update() {
+    _apt update
+    update ${@}
+    clean
+}
+
+quick-remove() {
+    _apt update
+    remove ${@}
+    clean
+}
+
+${@}
