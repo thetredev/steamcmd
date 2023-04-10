@@ -15,12 +15,12 @@ ENV STEAMCMD_INSTALL_DIR="${STEAMCMD_USER_HOME}/package" \
     STEAMCMD_SERVER_HOME="${STEAMCMD_USER_HOME}/server" \
     STEAMCMD_SERVER_SESSION_SOCKET="/tmp/steamcmd/session.sock" \
     STEAMCMD_SERVER_SESSION_FIFO="/tmp/steamcmd/session.fifo"
+ENV STEAMCMD_SH="${STEAMCMD_INSTALL_DIR}/steamcmd.sh"
 ## System
 ENV TIME_ZONE=UTC \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US \
     LC_ALL=C \
-    PATH=${PATH}:${STEAMCMD_INSTALL_DIR} \
     DEBIAN_FRONTEND=noninteractive
 
 # Copy build context into image
@@ -106,9 +106,8 @@ WORKDIR ${STEAMCMD_INSTALL_DIR}
 RUN curl -fsSL -O http://media.steampowered.com/installer/steamcmd_linux.tar.gz && \
     tar -xvzf steamcmd_linux.tar.gz && \
     rm -rf steamcmd_linux.tar.gz && \
-    ln -sf "$(pwd)/steamcmd.sh" "$(pwd)/steamcmd" && \
     mkdir -p "${HOME}/.steam" && \
-    steamcmd +quit > /dev/null 2>&1
+    ${STEAMCMD_SH} +quit > /dev/null 2>&1
 
 # Switch back to the root user
 USER root
