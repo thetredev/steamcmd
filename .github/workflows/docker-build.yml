@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-scan:
-    uses: thetredev/steamcmd/.github/workflows/build-scan-push-tag.yml@main
+    uses: thetredev/steamcmd/.github/workflows/build-push-tag.yml@main
     with:
       push: false
       tag: false

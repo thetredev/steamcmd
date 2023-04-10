@@ -1,4 +1,4 @@
-name: Reusable workflow for building and scanning images
+name: Reusable workflow for building and pushing images
 
 on:
   workflow_call:
@@ -34,57 +34,6 @@ jobs:
           for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
             docker-compose build ${docker_base_image_type}
           done
-
-      - name: Trivy CVE scan - base
-        if: ${{ inputs.push }}
-        uses: aquasecurity/trivy-action@0.8.0
-        with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:base"
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
-      - name: Dockle scan - base
-        if: ${{ inputs.push }}
-        uses: erzz/dockle-action@v1.3.1
-        with:
-          image: "${{ env.REGISTRY_IMAGE }}:base"
-          exit-code: '1'
-          dockle-version: '0.4.5'
-
-      - name: Trivy CVE scan - hlds
-        if: ${{ inputs.push }}
-        uses: aquasecurity/trivy-action@0.8.0
-        with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:hlds"
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
-      - name: Dockle scan - hlds
-        if: ${{ inputs.push }}
-        uses: erzz/dockle-action@v1.3.1
-        with:
-          image: "${{ env.REGISTRY_IMAGE }}:hlds"
-          exit-code: '1'
-          dockle-version: '0.4.5'
-
-      - name: Trivy CVE scan - srcds
-        if: ${{ inputs.push }}
-        uses: aquasecurity/trivy-action@0.8.0
-        with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:srcds"
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
-      - name: Dockle scan - srcds
-        if: ${{ inputs.push }}
-        uses: erzz/dockle-action@v1.3.1
-        with:
-          image: "${{ env.REGISTRY_IMAGE }}:srcds"
-          exit-code: '1'
-          dockle-version: '0.4.5'
 
       - name: Log in to GHCR
         if: ${{ inputs.push || inputs.tag }}

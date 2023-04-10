@@ -105,7 +105,7 @@ The GitHub Actions workflows are setup in the following way:
 - Pushes to the `main` branch lead to the image tags `ghcr.io/thetredev/steamcmd:<image>-latest`, where `<image>` is one of the following: `base`, `hlds` or `srcds` (see *the supported game server images* above)
 - Pushes of tags lead to retagging the `ghcr.io/thetredev/steamcmd:<image>-latest` images to `ghcr.io/thetredev/steamcmd:<image>-<tag>`
 
-All image builds are scanned for CVEs and only pushed as `latest` or the given tag if no CVEs are found. The scans can be viewed publicly [from within the Actions tab](https://github.com/thetredev/steamcmd/actions) at job **build**.
+All image builds used to be scanned for CVEs and only pushed as `latest` or the given tag if no CVEs are found. These scans have been removed and/or disabled since we're relying on official Steam Runtime images now (commit [a64d5003ac8d84eccc6326bc8270eef1105745e0](https://github.com/thetredev/steamcmd/tree/a64d5003ac8d84eccc6326bc8270eef1105745e0)) and we simply trust Valve to make the base images as secure as possible.
 
 ## Known bugs
 See the [project issues](https://github.com/thetredev/steamcmd/issues).
