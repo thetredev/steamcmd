@@ -1,4 +1,4 @@
-ARG STEAMRT_PLATFORM_VERSION=0.20230405.47175
+ARG STEAMRT_PLATFORM_VERSION=0.20230424.48416
 FROM registry.gitlab.steamos.cloud/steamrt/sniper/platform:${STEAMRT_PLATFORM_VERSION}
 
 # Build arguments
