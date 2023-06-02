@@ -27,7 +27,7 @@ jobs:
           # Compare current tag to remote tags
           new_tag=$(python3 ./scripts/compare_tags.py "${current_tag}" "${remote_tags}")
 
-          if [[ ${?} -eq 0 ]]; then
+          if [[ ! -z "${new_tag}" ]]; then
             echo "CI_PR_OLD_BASE_IMAGE_TAG=${current_tag}" >> $GITHUB_ENV
             echo "CI_PR_NEW_BASE_IMAGE_TAG=${new_tag}" >> $GITHUB_ENV
             echo "createpr=1" >> $GITHUB_OUTPUT
