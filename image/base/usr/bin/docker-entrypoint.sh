@@ -75,6 +75,9 @@ _prepare_ssh_server() {
         _prepare_ssh_host_key "ecdsa"
         _prepare_ssh_host_key "ed25519"
 
+        # Add SSHD rundir
+        mkdir -p /run/sshd
+
         # Add container environment as system environment variables to make them available in SSH sessions
         env | grep STEAMCMD_ > /etc/environment
 
