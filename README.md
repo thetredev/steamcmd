@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/github/workflow/status/thetredev/steamcmd/Docker%20build%20and%20publish%20latest.svg?logo=github)](https://github.com/thetredev/steamcmd/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/thetredev/steamcmd/docker-latest.yml)](https://github.com/thetredev/steamcmd/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/thetredev/steamcmd/badge)](https://www.codefactor.io/repository/github/thetredev/steamcmd)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
