@@ -19,9 +19,9 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 
 ### SSH server
 
-See the SSHD configuration at `image/base/etc/ssh/sshd_config.d/steamcmd.conf` for the options applied to the server. Only public key authentication is enabled!
+See the SSHD configuration at [`image/base/etc/ssh/sshd_config.d/steamcmd.conf`](image/base/etc/ssh/sshd_config.d/steamcmd.conf) for the options applied to the server. Only public key authentication is enabled!
 
-To enable the SSH server, set the environment variables `STEAMCMD_SSH_SERVER_ENABLE` to `1` and `STEAMCMD_SSH_AUTHORIZED_KEYS` to the Base64 encoded public SSH keys separated by newlines (see `compose/hlds/cs-ssh.yml` or `compose/srcds/css-ssh.yml`). `STEAMCMD_SSH_AUTHORIZED_KEYS` essentially represents the `~/.ssh/authorized_keys` file on the server side in encoded format.
+To enable the SSH server, set the environment variables `STEAMCMD_SSH_SERVER_ENABLE` to `1` and `STEAMCMD_SSH_AUTHORIZED_KEYS` to the Base64 encoded public SSH keys separated by newlines (see [`compose/hlds/cs-ssh.yml`](compose/hlds/cs-ssh.yml) or [`compose/srcds/css-ssh.yml`](compose/srcds/css-ssh.yml)). `STEAMCMD_SSH_AUTHORIZED_KEYS` essentially represents the `~/.ssh/authorized_keys` file on the server side in encoded format.
 
 To Base64-encode your public SSH keys, put all in one file and encode it:
 ```shell
@@ -35,16 +35,16 @@ cat ids.txt | base64 -w 0
 Then use the output as the value for `STEAMCMD_SSH_AUTHORIZED_KEYS`.
 
 ### HLDS image
-- Based on the `base` image
+- Based on the [`base`](image/base) image
 - Provides a generic base for HLDS-based game servers
-- Provides the script `/opt/server.sh` to manage game servers using a single `tmux` session
-- Provides a `docker-entrypoint.sh` which itself is executed as `root` with always-correct timezone and ownership of server files
+- Provides the script [`server.sh (HLDS)`](image/hlds/usr/local/bin/server.sh) to manage game servers using a single `tmux` session
+- Provides a [`docker-entrypoint.sh`](image/base/usr/bin/docker-entrypoint.sh) which itself is executed as `root` with always-correct timezone and ownership of server files
 
-The `/opt/server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
+The `server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
 
-### HLDS-based game server images
-- Based on the `hlds` image
-- Adds game server specific environment variables for configuration
+### HLDS-based game servers
+- Composed via [`compose/hlds`](compose/hlds)
+- Game server specific environment variables are used for configuration
 
 Currently supported game server images:
 
@@ -58,23 +58,21 @@ Currently supported game server images:
 | Deathmatch Classic | `ghcr.io/thetredev/steamcmd:hlds-latest` |
 | Team Fortress Classic | `ghcr.io/thetredev/steamcmd:hlds-latest` |
 
-See the `compose/hlds` directory for more details.
-
 **Note**: Ricochet seems like it's not available anymore.
 
 ### SRCDS image
-- Based on the `base` image
+- Based on the [`base`](image/base) image
 - Provides a generic base for SRCDS-based game servers
 - `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
-- Provides the script `/opt/server.sh` to manage game servers using a single `tmux` session
-- Provides a `docker-entrypoint.sh` which itself is executed as `root` with always-correct timezone and ownership of server files
+- Provides the script [`server.sh (SRCDS)`](image/srcds/usr/local/bin/server.sh) to manage game servers using a single `tmux` session
+- Provides a [`docker-entrypoint.sh`](image/base/usr/bin/docker-entrypoint.sh) which itself is executed as `root` with always-correct timezone and ownership of server files
 - Tries to enable `128 tick` configurations by default (CS:GO). CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
 
-The `/opt/server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
+The `server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
 
-### SRCDS-based game server images
-- Based on the `srcds` image
-- Adds game server specific environment variables for configuration
+### SRCDS-based game servers
+- Composed via [`compose/srcds`](compose/srcds)
+- Game server specific environment variables are used for configuration
 
 Currently supported game server images:
 
@@ -89,13 +87,15 @@ Currently supported game server images:
 | Left 4 Dead | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 
-See the `compose/srcds` directory for more details. If you want to run multiple game servers using one single compose file, see the file `compose/srcds/multiple.yml`.
+## Running multiple game servers
+
+If you want to run multiple game servers using one single compose file, see the example file [`compose/srcds/multiple.yml`](compose/srcds/multiple.yml).
 
 ## Kubernetes
 See https://github.com/thetredev/helm-charts.
 
 ## Image repositories
-The image repository is: `ghcr.io/thetredev/steamcmd`<br/>
+The main image repository is: `ghcr.io/thetredev/steamcmd`<br/>
 See https://github.com/thetredev/steamcmd/pkgs/container/steamcmd/versions for details.
 
 The GitHub image repository is synchronized with the Docker Hub repository:<br/>
