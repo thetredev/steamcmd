@@ -9,7 +9,7 @@ networks:
 # SRCDS image: Black Mesa: Deathmatch
 services:
   bms:
-    image: ghcr.io/thetredev/steamcmd:srcds-latest
+    image: ghcr.io/thetredev/steamcmd:csgo-latest
     container_name: bms
     restart: unless-stopped
     stdin_open: true

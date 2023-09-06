@@ -11,7 +11,8 @@ This project aims to provide pre-packaged `SteamCMD` docker images which are up-
 While [the official images](https://github.com/steamcmd/docker) are fine, my take differs in a couple ways:
 
 ### Base image
-- Based on the official [`Steam Runtime 3 (Sniper)` image](https://gitlab.steamos.cloud/steamrt/sniper/platform) with all necessary dependencies and basic tools preinstalled
+- Based on the official [`SteamRT v3 "(Sniper)"` image](https://gitlab.steamos.cloud/steamrt/sniper/platform) with all necessary dependencies and basic tools preinstalled
+- For legacy game servers (Source 1, non-CS:GO and HLDS) SteamRT v2 "Soldier" is used instead
 - The SteamCMD runtime error `[S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.` is fixed
 - It does not operate under the `root` user - a `steamcmd` user with default UID and GID of 5000 each is used instead
 - The server path is changed to `/var/lib/steamcmd/server`
@@ -23,13 +24,9 @@ See the SSHD configuration at [`image/base/etc/ssh/sshd_config.d/steamcmd.conf`]
 
 To enable the SSH server, set the environment variables `STEAMCMD_SSH_SERVER_ENABLE` to `1` and `STEAMCMD_SSH_AUTHORIZED_KEYS` to the Base64 encoded public SSH keys separated by newlines (see [`compose/hlds/cs-ssh.yml`](compose/hlds/cs-ssh.yml) or [`compose/srcds/css-ssh.yml`](compose/srcds/css-ssh.yml)). `STEAMCMD_SSH_AUTHORIZED_KEYS` essentially represents the `~/.ssh/authorized_keys` file on the server side in encoded format.
 
-To Base64-encode your public SSH keys, put all in one file and encode it:
+Base64-encode your public SSH keys:
 ```shell
-cat <ssh-key1>.pub >> ids.txt
-cat <ssh-key2>.pub >> ids.txt
-cat <ssh-key3>.pub >> ids.txt
-...
-cat ids.txt | base64 -w 0
+cat <ssh-key1>.pub <ssh-key2>.pub <ssh-keyN>.pub | base64 -w 0
 ```
 
 Then use the output as the value for `STEAMCMD_SSH_AUTHORIZED_KEYS`.
@@ -78,14 +75,16 @@ Currently supported game server images:
 
 | Game | Docker Image |
 | ---- | ---- |
-| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 | Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:srcds-latest` |
-| Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+| Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 | Day of Defeat: Source | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Garry's Mod | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Half Life 2: Deathmatch | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Left 4 Dead | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:srcds-latest` |
+
+Note that Black Mesa: Deathmatch and Counter-Strike: Global Offensive have their own dedicated `csgo` image, as these games are based on the CS:GO game engine and require newer runtimes to work correctly.
 
 ## Running multiple game servers
 

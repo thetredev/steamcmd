@@ -9,7 +9,7 @@ networks:
 # SRCDS image: Counter-Strike: Global Offensive
 services:
   csgo:
-    image: ghcr.io/thetredev/steamcmd:srcds-latest
+    image: ghcr.io/thetredev/steamcmd:csgo-latest
     container_name: csgo
     restart: unless-stopped
     stdin_open: true

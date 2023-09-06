@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source ./local-vars.sh
-docker compose build ${@}
+docker buildx bake -f docker-compose.yml ${@}

@@ -16,7 +16,7 @@ env:
   REGISTRY_IMAGE: "${{ github.repository_owner }}/${{ github.event.repository.name }}"
   GHCR_PREFIX: "ghcr.io"
   DOCKER_HUB_PREFIX: "docker.io"
-  DOCKER_IMAGE_BASE_ORDER: "base srcds hlds"
+  DOCKER_IMAGE_BUILD_ORDER: "base-legacy base-csgo hlds srcds csgo"
 
 jobs:
   build-scan-push-tag:
@@ -31,8 +31,9 @@ jobs:
       - name: Build all images
         if: ${{ inputs.push }}
         run: |
-          for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
-            docker-compose build ${docker_base_image_type}
+          for docker_image in ${DOCKER_IMAGE_BUILD_ORDER}; do
+            docker pull ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest || true
+            docker buildx bake -f docker-compose.yml ${docker_image}
           done
 
       - name: Log in to GHCR
@@ -53,25 +54,29 @@ jobs:
       - name: Push latest images to registries
         if: ${{ inputs.push }}
         run: |
-          docker_image_types=$(docker-compose config --services | paste -sd " " -)
+          docker_images=$(docker-compose config --services | paste -sd " " -)
 
-          for docker_image_type in ${docker_image_types}; do
-            docker tag ${REGISTRY_IMAGE}:${docker_image_type} ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
-            docker tag ${REGISTRY_IMAGE}:${docker_image_type} ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+          for docker_image in ${docker_images}; do
+            local_image=$(echo ${REGISTRY_IMAGE} | tr '/' '-')
 
-            docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
-            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image_type}-latest
+            docker tag ${local_image}:${docker_image} ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest
+            docker tag ${local_image}:${docker_image} ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest
+
+            docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest
+            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest
           done
 
       - name: Push tagged images to registries
         if: ${{ inputs.tag }}
         run: |
-          for docker_base_image_type in ${DOCKER_IMAGE_BASE_ORDER}; do
-            docker pull ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest
+          docker_images=$(docker-compose config --services | paste -sd " " -)
 
-            docker tag ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
-            docker tag ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-latest ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
+          for docker_image in ${docker_images}; do
+            docker pull ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest
 
-            docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
-            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_base_image_type}-${{ github.ref_name }}
+            docker tag ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-${{ github.ref_name }}
+            docker tag ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-latest ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-${{ github.ref_name }}
+
+            docker push ${GHCR_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-${{ github.ref_name }}
+            docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-${{ github.ref_name }}
           done
