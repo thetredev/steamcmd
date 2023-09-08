@@ -83,6 +83,10 @@ RUN apt-docker quick-install \
         chmod +x /usr/local/bin/gosu && \
         gosu nobody true \
     && \
+        # Configure bash prompt skeleton
+        echo "export PS1=$(cat /etc/skel.d/bash_prompt)" >> /etc/bash.bashrc && \
+        echo "export PS1=$(cat /etc/skel.d/bash_prompt)" >> /etc/skel/.bashrc \
+    && \
         # Create SteamCMD user
         groupadd -r -g "${STEAMCMD_GID}" steamcmd && \
         useradd -ms /bin/bash -d ${STEAMCMD_USER_HOME} -r -l -u "${STEAMCMD_UID}" -g "${STEAMCMD_GID}" steamcmd \

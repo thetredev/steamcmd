@@ -1,0 +1,1 @@
+'\n[\u@${STEAMCMD_SERVER_SESSION_NAME:-base} :: ${debian_chroot}]\n:: \w\n\$ '
