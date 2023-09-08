@@ -5,7 +5,7 @@
 # Sane SteamCMD Docker images
 This project aims to provide pre-packaged `SteamCMD` docker images which are up-to-date and especially easy to use.
 
-![steamcmd-preview](https://user-images.githubusercontent.com/6085219/174325276-07fea81e-d35d-4c39-979d-8a3ba7402817.gif)
+https://github.com/thetredev/steamcmd/assets/6085219/b7b807c0-3459-4522-89ed-343e4e2b3e8a
 
 ## Differences to official images
 While [the official images](https://github.com/steamcmd/docker) are fine, my take differs in a couple ways:
