@@ -40,19 +40,7 @@ _setup_csgo_hibernation_hooks() {
 }
 
 
-_run_post_csgo() {
-    if _is_attached; then
-        _setup_csgo_hibernation_hook_detached
-        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_hibernate_when_empty 0" "Enter"
-    fi
-}
-
-
 attach() {
-    if [[ ${STEAMCMD_SERVER_GAME} == "csgo" ]]; then
-        _setup_csgo_hibernation_hooks
-    fi
-
     _attach
 }
 
@@ -95,7 +83,7 @@ run() {
     _run_post
 
     if [[ ${STEAMCMD_SERVER_GAME} == "csgo" ]]; then
-        _run_post_csgo
+        _setup_csgo_hibernation_hooks
     fi
 
     return 0
