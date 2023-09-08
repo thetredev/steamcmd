@@ -20,14 +20,11 @@ _is_csgo_server() {
 }
 
 
-_prepare_tickrate_enabler() {
-    cat > ${1} << EOF_TICKRATE_ENABLER_CFG
-sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}
-sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}
-sv_minrate ${STEAMCMD_SERVER_MINRATE}
-sv_maxrate ${STEAMCMD_SERVER_MAXRATE:-0}
-fps_max ${STEAMCMD_SERVER_FPSMAX}
-EOF_TICKRATE_ENABLER_CFG
+_enable_tickrate() {
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}" "Enter"
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}" "Enter"
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_minrate ${STEAMCMD_SERVER_MINRATE}" "Enter"
+    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_maxrate ${STEAMCMD_SERVER_MAXRATE:-0}" "Enter"
 }
 
 
@@ -68,16 +65,6 @@ run() {
         return $pre_exit_code
     fi
 
-    steamcmd_cfg_dir=${STEAMCMD_SERVER_HOME}/${STEAMCMD_SERVER_GAME}/cfg
-
-    # Copy server.cfg file to the server cfg folder if it doesn't exist yet
-    if [[ ! -f ${steamcmd_cfg_dir}/server.cfg ]]; then
-        cp /etc/steamcmd/srcds/cfg/server.cfg ${steamcmd_cfg_dir}/server.cfg
-    fi
-
-    # Prepare tickrate_enabler.cfg file in the server cfg folder
-    _prepare_tickrate_enabler "${steamcmd_cfg_dir}/tickrate_enabler.cfg"
-
     echo ${MESSAGE_STEAMCMD_SERVER_STARTED}
 
     ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "cd ${STEAMCMD_SERVER_HOME}; bash ./srcds_run \
@@ -89,12 +76,14 @@ run() {
         +map ${STEAMCMD_SERVER_MAP} \
         -tickrate ${STEAMCMD_SERVER_TICKRATE} \
         -threads ${STEAMCMD_SERVER_THREADS} \
+        +fps_max ${STEAMCMD_SERVER_FPSMAX} \
         -nodev" "Enter"
 
     _run_post
 
     if _is_csgo_server; then
         _setup_csgo_hibernation_hooks
+        test ${STEAMCMD_SERVER_TICKRATE} -gt 64 && _enable_tickrate
     fi
 
     return 0
