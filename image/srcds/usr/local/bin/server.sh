@@ -21,10 +21,12 @@ _is_csgo_server() {
 
 
 _enable_tickrate() {
-    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}" "Enter"
-    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}" "Enter"
-    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_minrate ${STEAMCMD_SERVER_MINRATE}" "Enter"
-    ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_maxrate ${STEAMCMD_SERVER_MAXRATE:-0}" "Enter"
+    if [ ${STEAMCMD_SERVER_TICKRATE} -gt 64 ]; then
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}" "Enter"
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_mincmdrate ${STEAMCMD_SERVER_TICKRATE}" "Enter"
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_minrate ${STEAMCMD_SERVER_MINRATE}" "Enter"
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_maxrate ${STEAMCMD_SERVER_MAXRATE:-0}" "Enter"
+    fi
 }
 
 
@@ -81,7 +83,7 @@ run() {
 
     if _is_csgo_server; then
         _setup_csgo_hibernation_hooks
-        test ${STEAMCMD_SERVER_TICKRATE} -gt 64 && _enable_tickrate
+        _enable_tickrate
     fi
 
     return 0
