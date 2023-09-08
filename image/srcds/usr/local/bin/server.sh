@@ -9,6 +9,17 @@ source /usr/local/lib/steamcmd/server-common.sh srcds
 
 
 # Define SRCDS-specific functions
+_is_csgo_server() {
+    local csgo_appids="740 346680" # CS:GO, BMS
+
+    for csgo_appid in ${csgo_appids}; do
+        test "${STEAMCMD_SERVER_APPID}" = "${csgo_appid}" && return 0
+    done
+
+    return 1
+}
+
+
 _prepare_tickrate_enabler() {
     cat > ${1} << EOF_TICKRATE_ENABLER_CFG
 sv_minupdaterate ${STEAMCMD_SERVER_TICKRATE}
@@ -82,7 +93,7 @@ run() {
 
     _run_post
 
-    if [[ ${STEAMCMD_SERVER_GAME} == "csgo" ]]; then
+    if _is_csgo_server; then
         _setup_csgo_hibernation_hooks
     fi
 
