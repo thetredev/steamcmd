@@ -41,10 +41,8 @@ _setup_csgo_hibernation_hook_detached() {
 
 
 _setup_csgo_hibernation_hooks() {
-    if healthy; then
-        _setup_csgo_hibernation_hook_detached
-        _setup_csgo_hibernation_hook_attached
-    fi
+    _setup_csgo_hibernation_hook_detached
+    _setup_csgo_hibernation_hook_attached
 }
 
 
