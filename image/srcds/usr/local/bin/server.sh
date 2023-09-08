@@ -43,6 +43,10 @@ _setup_csgo_hibernation_hook_detached() {
 
 
 _setup_csgo_hibernation_hooks() {
+    if _is_attached; then
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "sv_hibernate_when_empty 0" "Enter"
+    fi
+
     _setup_csgo_hibernation_hook_detached
     _setup_csgo_hibernation_hook_attached
 }
