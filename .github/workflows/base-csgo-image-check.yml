@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Compare base-csgo image platform and tag
-        id: compare-base-csgo
+        id: compare_csgo
         run: |
           # Get base-csgo SteamRT platform variant
           export STEAMRT_PLATFORM_VARIANT=$(docker compose config base-csgo | grep 'STEAMRT_PLATFORM_VARIANT' | cut -d ':' -f 2 | xargs)
@@ -37,7 +37,7 @@ jobs:
           fi
 
       - name: Check if pull request exists for newer base-csgo image
-        if: ${{ steps.compare.outputs.createpr_csgo == 1 }}
+        if: ${{ steps.compare_csgo.outputs.createpr_csgo == 1 }}
         id: checkpr_csgo
         uses: actions/github-script@v6
         with:
@@ -63,8 +63,8 @@ jobs:
         if: ${{ steps.checkpr_csgo.outputs.result == 'continue' }}
         run: |
           # Install yq
-          apt-get update
-          apt-get install -y --no-install-recommends yq
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends yq
 
           # Prepare git user
           git config user.name github-actions
