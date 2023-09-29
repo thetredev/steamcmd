@@ -63,8 +63,8 @@ jobs:
         if: ${{ steps.checkpr_csgo.outputs.result == 'continue' }}
         run: |
           # Install yq
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends yq
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
 
           # Prepare git user
           git config user.name github-actions
