@@ -76,9 +76,7 @@ jobs:
           git checkout -b actions/bump-base-legacy-image-tag
 
           # Replace base-legacy image tag
-          cat docker-compose.yml | yq -M -y '.services."base-legacy".build.args.STEAMRT_PLATFORM_VERSION = "${CI_PR_NEW_BASE_LEGACY_IMAGE_TAG}"' > docker-compose-new.yml
-          rm -rf docker-compose.yml
-          mv docker-compose-new.yml docker-compose.yml
+          yq -i '.services."base-legacy".build.args.STEAMRT_PLATFORM_VERSION = "${CI_PR_NEW_BASE_LEGACY_IMAGE_TAG}"' docker-compose.yml
 
           # Add, commit and push changes to the branch
           git add docker-compose.yml
