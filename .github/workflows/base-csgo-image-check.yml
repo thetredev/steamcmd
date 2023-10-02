@@ -59,12 +59,16 @@ jobs:
             return 'continue'
           result-encoding: string
 
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.1'
+
       - name: Push new branch with updated base-csgo image
         if: ${{ steps.checkpr_csgo.outputs.result == 'continue' }}
         run: |
           # Install yq
-          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
-          sudo chmod +x /usr/bin/yq
+          go install github.com/mikefarah/yq/v4@latest
 
           # Prepare git user
           git config user.name github-actions
@@ -76,8 +80,8 @@ jobs:
           git checkout -b actions/bump-base-csgo-image-tag
 
           # Replace base-csgo image tag
-          yq -i '.services."base-csgo".build.args.STEAMRT_PLATFORM_VERSION = "${CI_PR_NEW_BASE_CSGO_IMAGE_TAG}"' docker-compose.yml
-          
+          yq -i '.services."base-csgo".build.args.STEAMRT_PLATFORM_VERSION = strenv(CI_PR_NEW_BASE_LEGACY_IMAGE_TAG)' docker-compose.yml
+
           # Add, commit and push changes to the branch
           git add docker-compose.yml
           git commit -m "Bump base-csgo image tag to ${CI_PR_NEW_BASE_CSGO_IMAGE_TAG}"
