@@ -7,7 +7,7 @@ services:
       args:
         BUILDKIT_INLINE_CACHE: '1'
         STEAMRT_PLATFORM_VARIANT: sniper
-        STEAMRT_PLATFORM_VERSION: 0.20230808.56699
+        STEAMRT_PLATFORM_VERSION: 0.20231002.61997
       cache_from:
         - ghcr.io/thetredev/steamcmd:base-csgo-latest
         - thetredev-steamcmd:base-csgo
