@@ -22,6 +22,7 @@ services:
       STEAMCMD_SERVER_GAME: cstrike
       STEAMCMD_SERVER_MAP: de_dust2
       STEAMCMD_SERVER_TICKRATE: 67
+      STEAMCMD_SERVER_MAXPLAYERS: 32
       STEAMCMD_SERVER_SESSION_NAME: css
     ports:
       - "27015:27015/udp"

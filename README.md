@@ -12,7 +12,7 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 
 ### Base image
 - Based on the official [`SteamRT v3 "(Sniper)"` image](https://gitlab.steamos.cloud/steamrt/sniper/platform) with all necessary dependencies and basic tools preinstalled
-- For legacy game servers (Source 1, non-CS:GO and HLDS) SteamRT v2 "Soldier" is used instead
+- For legacy game servers (Source 1, non-CS 2 and HLDS) SteamRT v2 "Soldier" is used instead
 - The SteamCMD runtime error `[S_API FAIL] SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.dll.` is fixed
 - It does not operate under the `root` user - a `steamcmd` user with default UID and GID of 5000 each is used instead
 - The server path is changed to `/var/lib/steamcmd/server`
@@ -63,7 +63,7 @@ Currently supported game server images:
 - `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
 - Provides the script [`server.sh (SRCDS)`](image/srcds/usr/local/bin/server.sh) to manage game servers using a single `tmux` session
 - Provides a [`docker-entrypoint.sh`](image/base/usr/bin/docker-entrypoint.sh) which itself is executed as `root` with always-correct timezone and ownership of server files
-- Tries to enable `128 tick` configurations by default (CS:GO). CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
+- Tries to enable `128 tick` configurations by default. CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
 
 The `server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
 
@@ -75,16 +75,35 @@ Currently supported game server images:
 
 | Game | Docker Image |
 | ---- | ---- |
-| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 | Counter-Strike: Source | `ghcr.io/thetredev/steamcmd:srcds-latest` |
-| Counter-Strike: Global Offensive | `ghcr.io/thetredev/steamcmd:csgo-latest` |
 | Day of Defeat: Source | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Garry's Mod | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Half Life 2: Deathmatch | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Left 4 Dead | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 
-Note that Black Mesa: Deathmatch and Counter-Strike: Global Offensive have their own dedicated `csgo` image, as these games are based on the CS:GO game engine and require newer runtimes to work correctly.
+### Source 2 image
+- Based on the [`base`](image/base) image
+- Provides a generic base for Source 2 based game servers
+- `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
+- Provides the script [`server.sh (SRCDS)`](image/srcds/usr/local/bin/server.sh) to manage game servers using a single `tmux` session
+- Provides a [`docker-entrypoint.sh`](image/base/usr/bin/docker-entrypoint.sh) which itself is executed as `root` with always-correct timezone and ownership of server files
+- Tries to enable `128 tick` configurations by default (Black Mesa: Deathmatch). CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
+
+The `server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
+
+### Source 2 based game servers
+- Composed via [`compose/source2`](compose/source2)
+- Game server specific environment variables are used for configuration
+
+Currently supported game server images:
+
+| Game | Docker Image |
+| ---- | ---- |
+| Black Mesa: Deathmatch | `ghcr.io/thetredev/steamcmd:source2-latest` |
+| Counter-Strike 2 | `ghcr.io/thetredev/steamcmd:source2-latest` |
+
+Note that Black Mesa: Deathmatch is built on the Counter-Strike: Global Offensive engine, which is a modified/updated version of Source 1. However, since the Source 2 image is based on the SteamRT `sniper` runtime, which was also used for CS:GO before CS 2 came along, the Black Mesa: Deathmatch game server container is now run via the Source 2 image. If you encounter any issues, please head over to the [project issues](https://github.com/thetredev/steamcmd/issues) and create a new issue to let me know.
 
 ## Running multiple game servers
 

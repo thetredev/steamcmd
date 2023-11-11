@@ -1,27 +1,27 @@
-name: Check for newer base-csgo image every night
+name: Check for newer base-source2 image every night
 
 on:
   schedule:
     - cron: "0 0 * * *"
 
 jobs:
-  compare-base-csgo-image-tag:
+  compare-base-source2-image-tag:
     permissions: write-all
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compare base-csgo image platform and tag
-        id: compare_csgo
+      - name: Compare base-source2 image platform and tag
+        id: compare_source2
         run: |
-          # Get base-csgo SteamRT platform variant
-          export STEAMRT_PLATFORM_VARIANT=$(docker compose config base-csgo | grep 'STEAMRT_PLATFORM_VARIANT' | cut -d ':' -f 2 | xargs)
-          export STEAMRT_PLATFORM_VERSION=$(docker compose config base-csgo | grep 'STEAMRT_PLATFORM_VERSION' | cut -d ':' -f 2 | xargs)
+          # Get base-source2 SteamRT platform variant
+          export STEAMRT_PLATFORM_VARIANT=$(docker compose config base-source2 | grep 'STEAMRT_PLATFORM_VARIANT' | cut -d ':' -f 2 | xargs)
+          export STEAMRT_PLATFORM_VERSION=$(docker compose config base-source2 | grep 'STEAMRT_PLATFORM_VERSION' | cut -d ':' -f 2 | xargs)
 
           # Get image repository
           current_repository=$(eval echo $(sed -rn '/FROM /p' image/base/Dockerfile | cut -d ' ' -f 2 | cut -d ':' -f 1))
 
-          # Use crane to list all available remote tags based on the base-csgo image tag prefix
+          # Use crane to list all available remote tags based on the base-source2 image tag prefix
           # https://github.com/google/go-containerregistry/tree/main/cmd/crane
           remote_tags=$(docker run --rm gcr.io/go-containerregistry/crane:v0.15.2 ls ${current_repository} | grep -v -e '[[a-z]]*')
 
@@ -29,16 +29,16 @@ jobs:
           new_tag=$(python3 ./scripts/compare_tags.py "${STEAMRT_PLATFORM_VERSION}" "${remote_tags}")
 
           if [[ ! -z "${new_tag}" ]]; then
-            echo "CI_PR_NEW_BASE_CSGO_IMAGE_TAG=${new_tag}" >> $GITHUB_ENV
-            echo "createpr_csgo=1" >> $GITHUB_OUTPUT
+            echo "CI_PR_NEW_BASE_source2_IMAGE_TAG=${new_tag}" >> $GITHUB_ENV
+            echo "createpr_source2=1" >> $GITHUB_OUTPUT
           else
             echo "No newer tag found."
-            echo "createpr_csgo=0" >> $GITHUB_OUTPUT
+            echo "createpr_source2=0" >> $GITHUB_OUTPUT
           fi
 
-      - name: Check if pull request exists for newer base-csgo image
-        if: ${{ steps.compare_csgo.outputs.createpr_csgo == 1 }}
-        id: checkpr_csgo
+      - name: Check if pull request exists for newer base-source2 image
+        if: ${{ steps.compare_source2.outputs.createpr_source2 == 1 }}
+        id: checkpr_source2
         uses: actions/github-script@v6
         with:
           script: |
@@ -46,7 +46,7 @@ jobs:
             const result = await github.rest.pulls.list({
               owner,
               repo,
-              head: 'actions/bump-base-csgo-image-tag',
+              head: 'actions/bump-base-source2-image-tag',
               base: 'main',
               state: 'open'
             });
@@ -64,8 +64,8 @@ jobs:
         with:
           go-version: '1.21.1'
 
-      - name: Push new branch with updated base-csgo image
-        if: ${{ steps.checkpr_csgo.outputs.result == 'continue' }}
+      - name: Push new branch with updated base-source2 image
+        if: ${{ steps.checkpr_source2.outputs.result == 'continue' }}
         run: |
           # Install yq
           go install github.com/mikefarah/yq/v4@latest
@@ -77,32 +77,32 @@ jobs:
           # Checkout new branch from main
           git fetch origin main
           git checkout main
-          git checkout -b actions/bump-base-csgo-image-tag
+          git checkout -b actions/bump-base-source2-image-tag
 
-          # Replace base-csgo image tag
-          yq -i '.services."base-csgo".build.args.STEAMRT_PLATFORM_VERSION = strenv(CI_PR_NEW_BASE_CSGO_IMAGE_TAG)' docker-compose.yml
+          # Replace base-source2 image tag
+          yq -i '.services."base-source2".build.args.STEAMRT_PLATFORM_VERSION = strenv(CI_PR_NEW_BASE_source2_IMAGE_TAG)' docker-compose.yml
 
           # Add, commit and push changes to the branch
           git add docker-compose.yml
-          git commit -m "Bump base-csgo image tag to ${CI_PR_NEW_BASE_CSGO_IMAGE_TAG}"
-          git push origin actions/bump-base-csgo-image-tag -f
+          git commit -m "Bump base-source2 image tag to ${CI_PR_NEW_BASE_source2_IMAGE_TAG}"
+          git push origin actions/bump-base-source2-image-tag -f
 
-      - name: Create pull request for newer base-csgo image
-        if: ${{ steps.checkpr_csgo.outputs.result == 'continue' }}
+      - name: Create pull request for newer base-source2 image
+        if: ${{ steps.checkpr_source2.outputs.result == 'continue' }}
         uses: actions/github-script@v6
         with:
           script: |
             const { repo, owner } = context.repo;
             const result = await github.rest.pulls.create({
-              title: `[Bump] base-csgo image tag to ${process.env.CI_PR_NEW_BASE_CSGO_IMAGE_TAG}`,
+              title: `[Bump] base-source2 image tag to ${process.env.CI_PR_NEW_BASE_source2_IMAGE_TAG}`,
               owner,
               repo,
-              head: 'actions/bump-base-csgo-image-tag',
+              head: 'actions/bump-base-source2-image-tag',
               base: 'main'
             });
             github.rest.issues.addLabels({
               owner,
               repo,
               issue_number: result.data.number,
-              labels: ['improvement', 'bump base-csgo image tag']
+              labels: ['improvement', 'bump base-source2 image tag']
             });

@@ -6,10 +6,10 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: 0
 
-# SRCDS image: Black Mesa: Deathmatch
+# Source 2 image: Black Mesa: Deathmatch
 services:
   bms:
-    image: ghcr.io/thetredev/steamcmd:csgo-latest
+    image: ghcr.io/thetredev/steamcmd:source2-latest
     container_name: bms
     restart: unless-stopped
     stdin_open: true

@@ -16,7 +16,7 @@ env:
   REGISTRY_IMAGE: "${{ github.repository_owner }}/${{ github.event.repository.name }}"
   GHCR_PREFIX: "ghcr.io"
   DOCKER_HUB_PREFIX: "docker.io"
-  DOCKER_IMAGE_BUILD_ORDER: "base-legacy base-csgo hlds srcds csgo"
+  DOCKER_IMAGE_BUILD_ORDER: "base-legacy base-source2 legacy hlds srcds source2"
 
 jobs:
   build-scan-push-tag:

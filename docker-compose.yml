@@ -1,17 +1,5 @@
 version: '3.7'
 services:
-  base-csgo:
-    build:
-      context: ./image/base
-      dockerfile: Dockerfile
-      args:
-        BUILDKIT_INLINE_CACHE: '1'
-        STEAMRT_PLATFORM_VARIANT: sniper
-        STEAMRT_PLATFORM_VERSION: 0.20231107.66301
-      cache_from:
-        - ghcr.io/thetredev/steamcmd:base-csgo-latest
-        - thetredev-steamcmd:base-csgo
-    image: thetredev-steamcmd:base-csgo
   base-legacy:
     build:
       context: ./image/base
@@ -24,37 +12,42 @@ services:
         - ghcr.io/thetredev/steamcmd:base-legacy-latest
         - thetredev-steamcmd:base-legacy
     image: thetredev-steamcmd:base-legacy
-  csgo:
+  base-source2:
     build:
-      context: ./image/srcds
+      context: ./image/base
       dockerfile: Dockerfile
       args:
         BUILDKIT_INLINE_CACHE: '1'
-        REGISTRY_BASE_IMAGE: thetredev-steamcmd:base-csgo
-        STEAMCMD_SERVER_FPSMAX: '300'
-        STEAMCMD_SERVER_MAXPLAYERS: '"-maxplayers_override 32"'
-        STEAMCMD_SERVER_MINRATE: '8000'
-        STEAMCMD_SERVER_PORT: '27015'
-        STEAMCMD_SERVER_SESSION_NAME: csgo
-        STEAMCMD_SERVER_THREADS: '3'
-        STEAMCMD_SERVER_TICKRATE: '128'
+        STEAMRT_PLATFORM_VARIANT: sniper
+        STEAMRT_PLATFORM_VERSION: 0.20231107.66301
       cache_from:
-        - ghcr.io/thetredev/steamcmd:base-csgo-latest
-        - thetredev-steamcmd:srcds
-    image: thetredev-steamcmd:csgo
+        - ghcr.io/thetredev/steamcmd:base-source2-latest
+        - thetredev-steamcmd:base-source2
+    image: thetredev-steamcmd:base-source2
+  legacy:
+    build:
+      context: ./image/legacy
+      dockerfile: Dockerfile
+      args:
+        REGISTRY_BASE_IMAGE: thetredev-steamcmd:base-legacy
+        BUILDKIT_INLINE_CACHE: '1'
+      cache_from:
+        - ghcr.io/thetredev/steamcmd:legacy-latest
+        - thetredev-steamcmd:legacy
+    image: thetredev-steamcmd:legacy
   hlds:
     build:
       context: ./image/hlds
       dockerfile: Dockerfile
       args:
         BUILDKIT_INLINE_CACHE: '1'
-        REGISTRY_BASE_IMAGE: thetredev-steamcmd:base-legacy
+        REGISTRY_BASE_IMAGE: thetredev-steamcmd:legacy
         STEAMCMD_SERVER_APPID: '90'
         STEAMCMD_SERVER_MAXPLAYERS: '32'
         STEAMCMD_SERVER_PORT: '27015'
         STEAMCMD_SERVER_SESSION_NAME: hlds
       cache_from:
-        - ghcr.io/thetredev/steamcmd:base-hlds-latest
+        - ghcr.io/thetredev/steamcmd:hlds-latest
         - thetredev-steamcmd:hlds
     image: thetredev-steamcmd:hlds
   srcds:
@@ -63,9 +56,9 @@ services:
       dockerfile: Dockerfile
       args:
         BUILDKIT_INLINE_CACHE: '1'
-        REGISTRY_BASE_IMAGE: thetredev-steamcmd:base-legacy
+        REGISTRY_BASE_IMAGE: thetredev-steamcmd:legacy
         STEAMCMD_SERVER_FPSMAX: '300'
-        STEAMCMD_SERVER_MAXPLAYERS: '"+maxplayers 32"'
+        STEAMCMD_SERVER_MAXPLAYERS: '32'
         STEAMCMD_SERVER_MINRATE: '8000'
         STEAMCMD_SERVER_PORT: '27015'
         STEAMCMD_SERVER_SESSION_NAME: srcds
@@ -75,3 +68,21 @@ services:
         - ghcr.io/thetredev/steamcmd:base-srcds-latest
         - thetredev-steamcmd:srcds
     image: thetredev-steamcmd:srcds
+  source2:
+    build:
+      context: ./image/srcds
+      dockerfile: Dockerfile
+      args:
+        BUILDKIT_INLINE_CACHE: '1'
+        REGISTRY_BASE_IMAGE: thetredev-steamcmd:base-source2
+        STEAMCMD_SERVER_FPSMAX: '300'
+        STEAMCMD_SERVER_MAXPLAYERS: '32'
+        STEAMCMD_SERVER_MINRATE: '8000'
+        STEAMCMD_SERVER_PORT: '27015'
+        STEAMCMD_SERVER_SESSION_NAME: source2
+        STEAMCMD_SERVER_THREADS: '3'
+        STEAMCMD_SERVER_TICKRATE: '128'
+      cache_from:
+        - ghcr.io/thetredev/steamcmd:base-source2-latest
+        - thetredev-steamcmd:source2
+    image: thetredev-steamcmd:source2
