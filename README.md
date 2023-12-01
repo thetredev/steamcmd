@@ -7,6 +7,23 @@ This project aims to provide pre-packaged `SteamCMD` docker images which are up-
 
 https://github.com/thetredev/steamcmd/assets/6085219/b7b807c0-3459-4522-89ed-343e4e2b3e8a
 
+# Table of Contents
+- [Differences to official images](#differences-to-official-images)
+  - [Base image](#base-image)
+  - [SSH server](#ssh-server)
+  - [HLDS image](#hlds-image)
+  - [HLDS-based game servers](#hlds-based-game-servers)
+  - [SRCDS image](#srcds-image)
+  - [SRCDS-based game servers](#srcds-based-game-servers)
+  - [Source 2 image](#source-2-image)
+  - [Source 2 based game servers](#source-2-based-game-servers)
+- [Running multiple game servers](#running-multiple-game-servers)
+- [Kubernetes](#kubernetes)
+- [Image repositories](#image-repositories)
+- [Known bugs](#known-bugs)
+- [How to contribute?](#how-to-contribute)
+
+
 ## Differences to official images
 While [the official images](https://github.com/steamcmd/docker) are fine, my take differs in a couple ways:
 
