@@ -88,7 +88,7 @@ Currently supported game server images:
 - `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
 - Provides the script [`server.sh (SRCDS)`](image/srcds/usr/local/bin/server.sh) to manage game servers using a single `tmux` session
 - Provides a [`docker-entrypoint.sh`](image/base/usr/bin/docker-entrypoint.sh) which itself is executed as `root` with always-correct timezone and ownership of server files
-- Tries to enable `128 tick` configurations by default (Black Mesa: Deathmatch). CS:S will default to 67 [because Valve said it's better this way (in 2010)](https://store.steampowered.com/oldnews/3976).
+- Tries to enable `128 tick` configurations by default (Black Mesa: Deathmatch).
 
 The `server.sh` checks for the user executing it. If it's `root`, it executes itself as the `steamcmd` user via `exec gosu` to prevent ownership mismatch.
 
