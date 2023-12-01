@@ -11,18 +11,17 @@ https://github.com/thetredev/steamcmd/assets/6085219/b7b807c0-3459-4522-89ed-343
 - [Differences to official images](#differences-to-official-images)
   - [Base image](#base-image)
   - [SSH server](#ssh-server)
-  - [HLDS image](#hlds-image)
+- [HLDS image](#hlds-image)
   - [HLDS-based game servers](#hlds-based-game-servers)
-  - [SRCDS image](#srcds-image)
+- [SRCDS image](#srcds-image)
   - [SRCDS-based game servers](#srcds-based-game-servers)
-  - [Source 2 image](#source-2-image)
+- [Source 2 image](#source-2-image)
   - [Source 2 based game servers](#source-2-based-game-servers)
 - [Running multiple game servers](#running-multiple-game-servers)
 - [Kubernetes](#kubernetes)
 - [Image repositories](#image-repositories)
 - [Known bugs](#known-bugs)
 - [How to contribute?](#how-to-contribute)
-
 
 ## Differences to official images
 While [the official images](https://github.com/steamcmd/docker) are fine, my take differs in a couple ways:
@@ -48,7 +47,7 @@ cat <ssh-key1>.pub <ssh-key2>.pub <ssh-keyN>.pub | base64 -w 0
 
 Then use the output as the value for `STEAMCMD_SSH_AUTHORIZED_KEYS`.
 
-### HLDS image
+## HLDS image
 - Based on the [`base`](image/base) image
 - Provides a generic base for HLDS-based game servers
 - Provides the script [`server.sh (HLDS)`](image/hlds/usr/local/bin/server.sh) to manage game servers using a single `tmux` session
@@ -74,7 +73,7 @@ Currently supported game server images:
 
 **Note**: Ricochet seems like it's not available anymore.
 
-### SRCDS image
+## SRCDS image
 - Based on the [`base`](image/base) image
 - Provides a generic base for SRCDS-based game servers
 - `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
@@ -99,7 +98,7 @@ Currently supported game server images:
 | Left 4 Dead | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 | Left 4 Dead 2 | `ghcr.io/thetredev/steamcmd:srcds-latest` |
 
-### Source 2 image
+## Source 2 image
 - Based on the [`base`](image/base) image
 - Provides a generic base for Source 2 based game servers
 - `libstdc++`, `libtinfo` and other runtime errors due to missing dependencies are fixed
