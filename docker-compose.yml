@@ -7,7 +7,7 @@ services:
       args:
         BUILDKIT_INLINE_CACHE: '1'
         STEAMRT_PLATFORM_VARIANT: soldier
-        STEAMRT_PLATFORM_VERSION: 0.20231128.68710
+        STEAMRT_PLATFORM_VERSION: 0.20231211.70176
       cache_from:
         - ghcr.io/thetredev/steamcmd:base-legacy-latest
         - thetredev-steamcmd:base-legacy
