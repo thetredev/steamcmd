@@ -10,6 +10,7 @@ TMUX_CMD="tmux -S ${STEAMCMD_SERVER_SESSION_SOCKET}"
 
 # Define common healthy signal
 SIGNAL_SERVER_HEALTHY="Connection to Steam servers successful."
+SIGNAL_SERVER_HEALTHY2='\[STARTUP\] {*.*} activated session on GC'
 
 
 # Define common messages
@@ -38,7 +39,13 @@ _is_running() {
 
 
 healthy() {
-    return $(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME} | grep -w "${SIGNAL_SERVER_HEALTHY}" > /dev/null)
+    local captured_pane=$(${TMUX_CMD} capture-pane -pt ${STEAMCMD_SERVER_SESSION_NAME})
+
+    if $($(echo ${captured_pane} | grep -w "${SIGNAL_SERVER_HEALTHY}" > /dev/null)); then
+        return 0
+    fi
+
+    return $(echo ${captured_pane} | grep -wE "${SIGNAL_SERVER_HEALTHY2}" > /dev/null)
 }
 
 
