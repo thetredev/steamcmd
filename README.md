@@ -9,6 +9,7 @@ https://github.com/thetredev/steamcmd/assets/6085219/b7b807c0-3459-4522-89ed-343
 
 # Table of Contents
 - [Differences to official images](#differences-to-official-images)
+  - [tmux session socket](#tmux-session-socket)
   - [Base image](#base-image)
   - [SSH server](#ssh-server)
 - [HLDS image](#hlds-image)
@@ -26,6 +27,39 @@ https://github.com/thetredev/steamcmd/assets/6085219/b7b807c0-3459-4522-89ed-343
 ## Differences to official images
 While [the official images](https://github.com/steamcmd/docker) are fine, my take differs in a couple ways:
 
+### tmux session socket
+These containers create a `tmux` session socket at `/tmp/steamcmd/session.sock`. If it is exposed to your local file system, you can use it to for example attach to the SteamCMD game server session:
+```
+tmux -S </path/to/bind-mounted/socket> attach
+```
+
+To expose the socket, just bind-mount the path (using `cs2` as an example):
+```yaml
+services:
+  cs2:
+    ...
+    volumes:
+      - /tmp/steamcmd:/tmp/steamcmd
+    ...
+```
+
+Which would translate to:
+```
+tmux -S /tmp/steamcmd/session.sock attach
+```
+
+Beware that `attach` is a `tmux` command! So you could also use `a` instead:
+```
+tmux -S /tmp/steamcmd/session.sock a
+```
+
+Instead of the `attach` command, you can use `send-keys` to execute a command directly within the game server's shell, say `bot kick`:
+```
+tmux -S /tmp/steamcmd/session.sock send-keys "bot_kick" "Enter"
+```
+
+Unfortunately there's no way currently to provide a shorthand for `send-keys` yet.
+
 ### Base image
 - Based on the official [`SteamRT v3 "(Sniper)"` image](https://gitlab.steamos.cloud/steamrt/sniper/platform) with all necessary dependencies and basic tools preinstalled
 - For legacy game servers (Source 1, non-CS 2 and HLDS) SteamRT v2 "Soldier" is used instead
@@ -35,7 +69,6 @@ While [the official images](https://github.com/steamcmd/docker) are fine, my tak
 - `openssh-server` is installed to provide an easy and secure way of managing server files externally, even when using Kubernetes
 
 ### SSH server
-
 See the SSHD configuration at [`image/base/etc/ssh/sshd_config.d/steamcmd.conf`](image/base/etc/ssh/sshd_config.d/steamcmd.conf) for the options applied to the server. Only public key authentication is enabled!
 
 To enable the SSH server, set the environment variables `STEAMCMD_SSH_SERVER_ENABLE` to `1` and `STEAMCMD_SSH_AUTHORIZED_KEYS` to the Base64 encoded public SSH keys separated by newlines (see [`compose/hlds/cs-ssh.yml`](compose/hlds/cs-ssh.yml) or [`compose/srcds/css-ssh.yml`](compose/srcds/css-ssh.yml)). `STEAMCMD_SSH_AUTHORIZED_KEYS` essentially represents the `~/.ssh/authorized_keys` file on the server side in encoded format.
@@ -122,7 +155,6 @@ Currently supported game server images:
 Note that Black Mesa: Deathmatch is built on the Counter-Strike: Global Offensive engine, which is a modified/updated version of Source 1. However, since the Source 2 image is based on the SteamRT `sniper` runtime, which was also used for CS:GO before CS 2 came along, the Black Mesa: Deathmatch game server container is now run via the Source 2 image. If you encounter any issues, please head over to the [project issues](https://github.com/thetredev/steamcmd/issues) and create a new issue to let me know.
 
 ## Running multiple game servers
-
 If you want to run multiple game servers using one single compose file, see the example file [`compose/srcds/multiple.yml`](compose/srcds/multiple.yml).
 
 ## Kubernetes
