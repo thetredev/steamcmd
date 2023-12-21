@@ -85,7 +85,13 @@ _run_pre() {
         return 1
     fi
 
-    if _is_running ${command}; then
+    local server_command="${command}"
+
+    if [[ "${STEAMCMD_SERVER_APPID}" = "730" ]]; then
+        server_command="cs2"
+    fi
+
+    if _is_running ${server_command}; then
         echo ${MESSAGE_STEAMCMD_SERVER_RUNNING}
         return 2
     fi
