@@ -5,7 +5,7 @@ command_upper=$(echo ${command} | tr '[:lower:]' '[:upper:]')
 
 
 # Prefix tmux with shared session socket
-TMUX_CMD="tmux -S ${STEAMCMD_SERVER_SESSION_SOCKET}"
+TMUX_CMD="tmux -S ${STEAMCMD_SERVER_TMUX_SOCKET}"
 
 
 # Define common healthy signal
@@ -117,9 +117,9 @@ _run_post() {
 
 
 _logs_fifo() {
-    rm -f ${STEAMCMD_SERVER_SESSION_FIFO}
-    mkfifo ${STEAMCMD_SERVER_SESSION_FIFO}
+    rm -f ${STEAMCMD_SERVER_LOGS_SOCKET}
+    mkfifo ${STEAMCMD_SERVER_LOGS_SOCKET}
 
-    ${TMUX_CMD} pipe-pane -O -t ${STEAMCMD_SERVER_SESSION_NAME} 'cat > ${STEAMCMD_SERVER_SESSION_FIFO}'
-    while :; do cat ${STEAMCMD_SERVER_SESSION_FIFO}; done &
+    ${TMUX_CMD} pipe-pane -O -t ${STEAMCMD_SERVER_SESSION_NAME} 'cat > ${STEAMCMD_SERVER_LOGS_SOCKET}'
+    while :; do cat ${STEAMCMD_SERVER_LOGS_SOCKET}; done &
 }

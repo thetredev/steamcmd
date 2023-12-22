@@ -32,13 +32,11 @@ _fix_steamcmd_dumps_ownership() {
     chown -R steamcmd:steamcmd /tmp/dumps
 }
 
-# Helper function to fix tmux session dir ownership
-_fix_tmux_session_dir_ownership() {
-    local tmux_socket_dir=$(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})
-
-    echo "Fixing ownership of ${tmux_socket_dir}"
-    mkdir -p ${tmux_socket_dir}
-    chown -R steamcmd:steamcmd ${tmux_socket_dir}
+# Helper function to fix session socket dir ownership
+_fix_session_socket_dir_ownership() {
+    echo "Fixing ownership of ${STEAMCMD_SERVER_SOCKET_PATH}"
+    mkdir -p ${STEAMCMD_SERVER_SOCKET_PATH}
+    chown -R steamcmd:steamcmd ${STEAMCMD_SERVER_SOCKET_PATH}
 }
 
 # Helper function to fix host keys should they not exist
@@ -93,7 +91,7 @@ if [ $(id -u) -eq 0 ]; then
     _prepare_time_zone
     _prepare_steamcmd_user
     _fix_steamcmd_dumps_ownership
-    _fix_tmux_session_dir_ownership
+    _fix_session_socket_dir_ownership
 
     if [[ "${STEAMCMD_SSH_SERVER_ENABLE}" == "1" ]]; then
         _prepare_ssh_server

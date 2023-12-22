@@ -45,17 +45,17 @@ services:
 
 Which would translate to:
 ```
-tmux -S /tmp/steamcmd/session.sock attach
+tmux -S /tmp/steamcmd/tmux.sock attach
 ```
 
 Beware that `attach` is a `tmux` command! So you could also use `a` instead:
 ```
-tmux -S /tmp/steamcmd/session.sock a
+tmux -S /tmp/steamcmd/tmux.sock a
 ```
 
 Instead of the `attach` command, you can use `send-keys` to execute a command directly within the game server's shell, say `bot kick`:
 ```
-tmux -S /tmp/steamcmd/session.sock send-keys "bot_kick" "Enter"
+tmux -S /tmp/steamcmd/tmux.sock send-keys "bot_kick" "Enter"
 ```
 
 Unfortunately there's no way currently to provide a shorthand for `send-keys` yet.

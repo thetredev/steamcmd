@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Create tmux session
-echo "Creating tmux session with socket ${STEAMCMD_SERVER_SESSION_SOCKET}"
-tmux -S ${STEAMCMD_SERVER_SESSION_SOCKET} new-session -d -s ${STEAMCMD_SERVER_SESSION_NAME}
-chgrp steamcmd ${STEAMCMD_SERVER_SESSION_SOCKET}
-chmod g+rwx ${STEAMCMD_SERVER_SESSION_SOCKET}
+echo "Creating tmux session with socket ${STEAMCMD_SERVER_TMUX_SOCKET}"
+tmux -S ${STEAMCMD_SERVER_TMUX_SOCKET} new-session -d -s ${STEAMCMD_SERVER_SESSION_NAME}
+chgrp steamcmd ${STEAMCMD_SERVER_TMUX_SOCKET}
+chmod g+rwx ${STEAMCMD_SERVER_TMUX_SOCKET}
 
 # Copy tmux config file to socket location
-echo "Copying tmux session config file to $(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})/tmux.conf"
-cp -f /etc/tmux.conf $(dirname ${STEAMCMD_SERVER_SESSION_SOCKET})/tmux.conf
+echo "Copying tmux session config file to ${STEAMCMD_SERVER_SOCKET_PATH}/tmux.conf"
+cp -f /etc/tmux.conf ${STEAMCMD_SERVER_SOCKET_PATH}/tmux.conf
 
 echo "Linking steamclient.so files..."
 
