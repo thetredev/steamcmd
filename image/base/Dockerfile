@@ -26,14 +26,12 @@ ENV TIME_ZONE=UTC \
     LC_ALL=C \
     DEBIAN_FRONTEND=noninteractive
 
-# Copy build context into image
-COPY . /
-
 # Configure system
 WORKDIR /tmp
 
 RUN dpkg-reconfigure locales
-RUN apt-docker quick-install \
+RUN apt-get update && \
+    apt-get -y install --no-install-recommends \
         # basic tools
         file \
         zip \
@@ -47,10 +45,8 @@ RUN apt-docker quick-install \
         nano \
         bash-completion \
     && \
-        # Remve preinstalled SSHD configs but keep steamcmd.conf
-        mv /etc/ssh/sshd_config.d/steamcmd.conf /tmp/steamcmd.conf && \
-        rm -f /etc/ssh/sshd_config.d/* && \
-        mv /tmp/steamcmd.conf /etc/ssh/sshd_config.d/steamcmd.conf \
+        # Remve preinstalled SSHD configs
+        rm -f /etc/ssh/sshd_config.d/* \
     && \
         # Update CA certificates
         update-ca-certificates \
@@ -83,7 +79,10 @@ RUN apt-docker quick-install \
             /usr/bin/passwd \
             /usr/bin/gpasswd \
             /usr/bin/newgrp \
-            /usr/sbin/pam_timestamp_check
+            /usr/sbin/pam_timestamp_check \
+    && \
+        apt-get -y clean && \
+        rm -rf /var/lib/apt/lists/*
 
 # Switch to SteamCMD user
 USER steamcmd
@@ -106,6 +105,9 @@ WORKDIR ${STEAMCMD_SERVER_HOME}
 
 # Declare SteamCMD install directory as Docker volume to enable incremental updates
 VOLUME [ ${STEAMCMD_INSTALL_DIR} ]
+
+# Copy build context into image
+COPY . /
 
 # Declare server health check
 HEALTHCHECK --interval=5s --timeout=360s --start-period=15s --retries=20 \
