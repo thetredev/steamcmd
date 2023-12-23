@@ -18,7 +18,8 @@ ENV STEAMCMD_SH="${STEAMCMD_INSTALL_DIR}/steamcmd.sh"
 ## SteamCMD socket paths
 ENV STEAMCMD_SERVER_SOCKET_PATH="/tmp/steamcmd"
 ENV STEAMCMD_SERVER_TMUX_SOCKET="${STEAMCMD_SERVER_SOCKET_PATH}/tmux.sock" \
-    STEAMCMD_SERVER_LOGS_SOCKET="${STEAMCMD_SERVER_SOCKET_PATH}/logs.sock"
+    STEAMCMD_SERVER_LOGS_SOCKET="${STEAMCMD_SERVER_SOCKET_PATH}/logs.sock" \
+    STEAMCMD_SERVER_CONSOLE_SOCKET="${STEAMCMD_SERVER_SOCKET_PATH}/console.sock"
 ## System
 ENV TIME_ZONE=UTC \
     LANG=en_US.UTF-8 \
@@ -44,6 +45,8 @@ RUN apt-get update && \
         vim \
         nano \
         bash-completion \
+        # tools needed for managing unix domain sockets
+        netcat-openbsd \
     && \
         # Remve preinstalled SSHD configs
         rm -f /etc/ssh/sshd_config.d/* \

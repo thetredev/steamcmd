@@ -112,6 +112,8 @@ _run_post() {
 
     echo ${MESSAGE_STEAMCMD_SERVER_WAITING}
     until healthy; do :; done
+
+    _input_socket
     echo ${MESSAGE_STEAMCMD_SERVER_HEALTHY}
 }
 
@@ -122,4 +124,15 @@ _logs_fifo() {
 
     ${TMUX_CMD} pipe-pane -O -t ${STEAMCMD_SERVER_SESSION_NAME} 'cat > ${STEAMCMD_SERVER_LOGS_SOCKET}'
     while :; do cat ${STEAMCMD_SERVER_LOGS_SOCKET}; done &
+}
+
+
+_input_socket() {
+    rm -rf ${STEAMCMD_SERVER_CONSOLE_SOCKET}
+    nc -lkU ${STEAMCMD_SERVER_CONSOLE_SOCKET} &
+
+    while :; do
+        input_string=$(nc -Ul ${STEAMCMD_SERVER_CONSOLE_SOCKET} < /dev/null)
+        ${TMUX_CMD} send-keys -t ${STEAMCMD_SERVER_SESSION_NAME} "${input_string}" "Enter"
+    done &
 }

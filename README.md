@@ -10,6 +10,7 @@ https://github.com/thetredev/steamcmd/assets/6085219/b7b807c0-3459-4522-89ed-343
 # Table of Contents
 - [Differences to official images](#differences-to-official-images)
   - [tmux session socket](#tmux-session-socket)
+  - [console input socket](#console-input-socket)
   - [Base image](#base-image)
   - [SSH server](#ssh-server)
 - [HLDS image](#hlds-image)
@@ -59,6 +60,27 @@ tmux -S /tmp/steamcmd/tmux.sock send-keys "bot_kick" "Enter"
 ```
 
 Unfortunately there's no way currently to provide a shorthand for `send-keys` yet.
+
+### console input socket
+
+To get around the `tmux` session syntax noise, I decided to create a Unix domain socket as well.
+
+To type something in the SteamCMD game server console directly, you can use `netcat-openbsd` / `openbsd-netcat` like this:
+```
+echo "my server command" | nc -UN /tmp/steamcmd/console.sock
+```
+
+To expose the socket, just bind-mount the path (using `cs2` as an example):
+```yaml
+services:
+  cs2:
+    ...
+    volumes:
+      - /tmp/steamcmd:/tmp/steamcmd
+    ...
+```
+
+This socket makes it possible to forward console inputs from a web API or secure TCP socket for example.
 
 ### Base image
 - Based on the official [`SteamRT v3 "(Sniper)"` image](https://gitlab.steamos.cloud/steamrt/sniper/platform) with all necessary dependencies and basic tools preinstalled
