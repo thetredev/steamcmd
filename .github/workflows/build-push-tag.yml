@@ -81,7 +81,11 @@ jobs:
             docker push ${DOCKER_HUB_PREFIX}/${REGISTRY_IMAGE}:${docker_image}-${{ github.ref_name }}
           done
 
-      # Copied and modified from k0sctl: https://github.com/k0sproject/k0sctl/blob/main/.github/workflows/release.yaml
+      # Copied and modified from k0sctl: https://github.com/xdeb-org/xdeb-install/blob/main/.github/workflows/release.yml
+      - name: Add safe git directory
+        if: ${{ inputs.tag }}
+        run: git config --global --add safe.directory /__w/steamcmd/*
+
       ## Ugly hack to get the tag name
       ## github.ref gives the full reference like refs.tags.v0.0.1-beta1
       - name: Get branch name to draft release
@@ -90,11 +94,23 @@ jobs:
         run: |
           echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
 
+      - name: Unshallow git history
+        if: ${{ inputs.tag }}
+        env:
+          TAG_NAME: ${{ steps.branch_name.outputs.TAG_NAME }}
+        run: |
+          git fetch --unshallow
+          git checkout ${TAG_NAME}
+
+      - name: Generate changelog
+        if: ${{ inputs.tag }}
+        run: ./scripts/changelog.sh
+
       - name: Draft release
         if: ${{ inputs.tag }}
         uses: softprops/action-gh-release@v1
         with:
-          body: "${{ steps.branch_name.outputs.TAG_NAME }}"
+          body_path: public/changelog.md
           tag_name: ${{ steps.branch_name.outputs.TAG_NAME }}
           name: ${{ steps.branch_name.outputs.TAG_NAME }}
           draft: true # So we can manually edit before publishing
