@@ -2,6 +2,19 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/thetredev/steamcmd/badge)](https://www.codefactor.io/repository/github/thetredev/steamcmd)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+# Deprecation notice
+
+Shamelessly copying the following note from https://github.com/dmadisetti/steam-tui/blob/main/README.md:
+
+> [!NOTE]
+> Steam no longer has a backend only mode.
+
+So until further notice, this project is deprecated. I won't support requiring multiple gigabytes worth of packages (GUI stuff mostly, totalling to about ~ 4.5 last time I checked) just to run `steamcmd`.
+
+The project will be archived for the time being to stop GitHub from triggering CI workflows.
+
+This notice will be removed as soon as Valve has a backend only mode again, or someone finds a way how we can run `steamcmd` without these pointless dependencies.
+
 # Sane SteamCMD Docker images
 This project aims to provide pre-packaged `SteamCMD` docker images which are up-to-date and especially easy to use.
 
